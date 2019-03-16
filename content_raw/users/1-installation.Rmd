@@ -1,0 +1,37 @@
+---
+title: "Installation"
+output: html_vignette
+weight: 1
+---
+
+You can install dyno from github using:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("dynverse/dyno")
+```
+
+On Linux, you will need to install udunits and ImageMagick:
+
+* Debian / Ubuntu / Linux Mint: `sudo apt-get install libudunits2-dev imagemagick`
+* Fedora / CentOS / RHEL: `sudo dnf install udunits2-devel ImageMagick-c++-devel`
+
+[Docker](https://docs.docker.com/install) has to be installed to run TI methods. See https://docs.docker.com/install for instructions. For windows 10 you can install [Docker CE](https://store.docker.com/editions/community/docker-ce-desktop-windows), older windows installations require the [Docker toolbox](https://docs.docker.com/toolbox/overview/).
+
+You can test whether docker is correctly installed by running:
+
+```{r, message = TRUE}
+dynwrap::test_docker_installation(detailed = TRUE)
+```
+
+This command will give helpful tips if some parts of the installation are missing.
+
+## Frequent installation problems
+
+### `API rate limit exceeded`
+
+Dyno uses several R packages from Github and to do this it uses the GitHub API. By default, this API is limited to 60 requests. This can be easily increased by following the two steps that are recommended by `devtools::install_github`, namely:
+
+- Use `usethis::browse_github_pat()` to create a GitHub token
+- Use `usethis::edit_r_environ()` and add the environment variable with `GITHUB_PAT = 'your_github_token`. 
+- Restart R so that the GITHUB_PAT is read and reinstall dyno

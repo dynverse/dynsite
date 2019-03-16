@@ -1,0 +1,46 @@
+baseurl = "/"
+languageCode = "en-us"
+title = "dynverse"
+theme = "hugo-theme-learn"
+googleAnalytics = ""
+disqusShortname = ""
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+relativeurls = true
+
+[permalinks]
+    post = "/:year/:month/:day/:slug/"
+
+[[menu.main]]
+    name = "About"
+    url = "/about/"
+[[menu.main]]
+    name = "For developers: dynbenchmark"
+    url = "https://twitter.com/rstudio"
+[[menu.main]]
+    name = "For users: dyno"
+    url = "https://github.com/rstudio/blogdown"
+
+[params]
+    author = "Wouter Saelens and Robrecht Cannoodt"
+
+    description = "Dynverse"
+
+    custom_css = ["css/styles.css"]
+
+    # options for highlight.js (version, additional languages, and theme)
+    highlightjsVersion = "9.12.0"
+    highlightjsCDN = "//cdnjs.cloudflare.com/ajax/libs"
+    highlightjsLang = ["r", "yaml"]
+    highlightjsTheme = "github"
+
+    MathJaxCDN = "//cdnjs.cloudflare.com/ajax/libs"
+    MathJaxVersion = "2.7.5"
+
+    disableLanguageSwitchingButton = true
+
+    ordersectionsby = "weight"
+
+    themeVariant = "mine"
+
+[outputs]
+home = [ "HTML", "RSS", "JSON"]

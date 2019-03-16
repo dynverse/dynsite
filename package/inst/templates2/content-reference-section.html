@@ -1,0 +1,20 @@
+---
+title: {{{title}}}
+weight: {{{ix}}}
+chapter: false
+---
+
+<div class="row">
+  <p class="section-desc">{{{desc}}}</p>
+  <table>
+
+  <tbody>
+    {{#contents}}<tr>
+      <td>
+        <p>{{#aliases}}<code><a href="{{path}}">{{{.}}}</a></code> {{/aliases}}</p>
+      </td>
+      <td><p>{{{title}}}</p></td>
+    </tr>{{/contents}}
+  </tbody>
+  </table>
+</div>

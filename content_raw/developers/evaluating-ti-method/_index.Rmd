@@ -1,0 +1,6 @@
+---
+title: "Evaluating a TI method"
+chapter: true
+weight: 3
+---
+

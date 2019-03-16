@@ -1,0 +1,28 @@
+Package: dynsite
+Title: Package with the good things from pkgdown
+Version: 0.9.0
+Authors@R: c(
+    person("Saelens", "Wouter", role = c("aut", "cre"), email = "wouter.saelens@gmail.com")
+  )
+Description: Package with the good things from pkgdown
+      but for more than one package!
+License: MIT + file LICENSE
+URL: https://github.com/dynverse/dynverse.github.io
+BugReports: https://github.com/dynverse/dynverse.github.io
+Depends: 
+    R (>= 3.1.0)
+Imports:
+    pkgdown,
+    purrr,
+    dynutils,
+    styler,
+    testthat,
+    yaml,
+    rmarkdown
+Suggests: 
+    testthat
+VignetteBuilder: knitr
+SystemRequirements: pandoc
+RoxygenNote: 6.1.1
+Roxygen: list(markdown = TRUE)
+Encoding: UTF-8
