@@ -6,7 +6,7 @@ Authors@R: c(
   )
 Description: Package with the good things from pkgdown
       but for more than one package!
-License: MIT + file LICENSE
+License: MIT
 URL: https://github.com/dynverse/dynverse.github.io
 BugReports: https://github.com/dynverse/dynverse.github.io
 Depends: 
@@ -16,9 +16,30 @@ Imports:
     purrr,
     dynutils,
     styler,
-    testthat,
     yaml,
-    rmarkdown
+    rmarkdown,
+    knitr,
+    memoise,
+    rlang,
+    R6,
+    fs,
+    roxygen2,
+    magrittr,
+    callr,
+    cli,
+    crayon,
+    desc,
+    digest,
+    evaluate,
+    fansi,
+    highlight,
+    httr,
+    rematch2,
+    rstudioapi,
+    tibble,
+    whisker,
+    withr,
+    xml2
 Suggests: 
     testthat
 VignetteBuilder: knitr
