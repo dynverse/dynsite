@@ -1,8 +1,5 @@
 #' Generate pkgdown data structure
 #'
-#' You will generally not need to use this unless you need a custom site
-#' design and you're writing your own equivalent of [build_site()].
-#'
 #' @param pkg Path to package.
 #' @param override An optional named list used to temporarily override
 #'   values in `_pkgdown.yml`

@@ -13,6 +13,5 @@ as_pkgdown(pkg = ".", override = list())
 values in \code{_pkgdown.yml}}
 }
 \description{
-You will generally not need to use this unless you need a custom site
-design and you're writing your own equivalent of \code{\link[=build_site]{build_site()}}.
+Generate pkgdown data structure
 }
