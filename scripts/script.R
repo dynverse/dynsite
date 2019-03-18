@@ -80,7 +80,7 @@ purrr::transpose(vignettes) %>% walk(adapt_frontmatter)
 #   ____________________________________________________________________________
 #   Reference                                                               ####
 
-package <- "dynplot"
+package <- "dynwrap"
 pkg <- as_pkgdown(paste0("../../", package))
 pkg_data <- get_topics_and_sections(pkg)
 
@@ -92,7 +92,10 @@ get_sections_data <- function(pkg_data) {
 }
 
 get_section_data <- function(pkg_data, section_id) {
-  pkg_data$sections %>% filter(id == !!section_id) %>% dynutils::extract_row_to_list(1)
+  c(
+    list(package = package),
+    pkg_data$sections %>% filter(id == !!section_id) %>% dynutils::extract_row_to_list(1)
+  )
 }
 
 get_topic_data <- function(pkg_data, topic_name) {
