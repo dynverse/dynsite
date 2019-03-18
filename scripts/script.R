@@ -47,7 +47,7 @@ vignettes <- tribble(
 ) %>%
   mutate(
     file_original = fs::path(deframe(select(packages, id, folder))[package], "vignettes", file_original),
-    file_rmd = content_path(fs::path(folder_output, fs::path_file(vignettes$file_original)), "Rmd"),
+    file_rmd = content_path(fs::path(folder_output, fs::path_file(file_original)), "Rmd"),
     file_out = file_rmd %>% fs::path_ext_remove()
   )
 
@@ -80,7 +80,7 @@ purrr::transpose(vignettes) %>% walk(adapt_frontmatter)
 #   ____________________________________________________________________________
 #   Reference                                                               ####
 
-package <- "dynwrap"
+package <- "dynplot"
 pkg <- as_pkgdown(paste0("../../", package))
 pkg_data <- get_topics_and_sections(pkg)
 
@@ -127,17 +127,11 @@ walk(transpose(pkg_data$sections), function(section) {
 
 #   ____________________________________________________________________________
 #   Render                                                                  ####
-blogdown::serve_site()
-#
-# blogdown::build_site()
-#
-#
-# fs::dir_delete("public")
-# processx::run("hugo", echo = T) %>% invisible()
+args = commandArgs(trailingOnly=TRUE)
+if (length(args) > 0 && args[1] == "build") {
+  blogdown::build_site()
+} else {
+  blogdown::serve_site()
+}
 
-
-
-#   ____________________________________________________________________________
-#   Testing                                                                 ####
-# gem install html-proofer
-processx::run("htmlproofer", c("public", "--allow-hash-href"), echo = T) %>% invisible()
+blogdown::stop_server()
