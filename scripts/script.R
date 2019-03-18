@@ -23,9 +23,11 @@ content_path <- function(path, ext = "html") {
 
 packages <- tribble(
   ~id, ~folder,
-  "dynwrap", "../../dynwrap",
-  "dynplot", "../../dynplot"
-)
+  "dynwrap", "../dynwrap",
+  "dynplot", "../dynplot",
+  "dynmethods", "../dynmethods"
+) %>%
+  mutate(ix = row_number())
 
 
 #   ____________________________________________________________________________
@@ -80,20 +82,15 @@ purrr::transpose(vignettes) %>% walk(adapt_frontmatter)
 #   ____________________________________________________________________________
 #   Reference                                                               ####
 
-package <- "dynwrap"
-pkg <- as_pkgdown(paste0("../../", package))
-pkg_data <- get_topics_and_sections(pkg)
-
 get_sections_data <- function(pkg_data) {
-  list(
-    package = package,
-    sections = transpose(pkg_data$sections)
-  )
+  data <- pkg_data
+  data$sections <- transpose(data$sections)
+  data
 }
 
 get_section_data <- function(pkg_data, section_id) {
   c(
-    list(package = package),
+    list(package = pkg_data$package),
     pkg_data$sections %>% filter(id == !!section_id) %>% dynutils::extract_row_to_list(1)
   )
 }
@@ -105,28 +102,34 @@ get_topic_data <- function(pkg_data, topic_name) {
   c(topic, topic_data)
 }
 
-# render package index
-template <- system.file("templates2/content-reference-index.html", package = "dynsite") %>% readr::read_lines()
-whisker::whisker.render(template, get_sections_data(pkg_data)) %>%
-  readr::write_lines(content_path(paste0("reference/", package, "/")))
+package <- packages %>% extract_row_to_list(1)
+walk(transpose(packages %>% filter(id == "dynplot")), function(package) {
+# walk(transpose(packages), function(package) {
+  pkg <- as_pkgdown(package$folder)
+  pkg_data <- get_topics_and_sections(pkg, package = package)
 
-# render sections
-walk(transpose(pkg_data$sections), function(section) {
-  template <- system.file("templates2/content-reference-section.html", package = "dynsite") %>% readr::read_lines()
-  whisker::whisker.render(template, get_section_data(pkg_data, section$id)) %>%
-    readr::write_lines(content_path(section$path))
+  # render package index
+  template <- system.file("templates2/content-reference-index.html", package = "dynsite") %>% readr::read_lines()
+  whisker::whisker.render(template, get_sections_data(pkg_data)) %>%
+    readr::write_lines(content_path(paste0("reference/", package$id, "/")))
 
-  # render topics
-  topic_names <- section$contents %>% map_chr("name")
-  topics <- map(topic_names, get_topic_data, pkg_data = pkg_data)
+  # render sections
+  walk(transpose(pkg_data$sections), function(section) {
+    template <- system.file("templates2/content-reference-section.html", package = "dynsite") %>% readr::read_lines()
+    whisker::whisker.render(template, get_section_data(pkg_data, section$id)) %>%
+      readr::write_lines(content_path(section$path))
 
-  template <- system.file("templates2/content-reference-topic.html", package = "dynsite") %>% readr::read_lines()
-  walk(topics, function(topic) {
-    whisker::whisker.render(template, topic) %>%
-      readr::write_lines(content_path(topic$path))
+    # render topics
+    topic_names <- section$contents %>% map_chr("name")
+    topics <- map(topic_names, get_topic_data, pkg_data = pkg_data)
+
+    template <- system.file("templates2/content-reference-topic.html", package = "dynsite") %>% readr::read_lines()
+    walk(topics, function(topic) {
+      whisker::whisker.render(template, topic) %>%
+        readr::write_lines(content_path(topic$path))
+    })
   })
 })
-
 
 #   ____________________________________________________________________________
 #   Render                                                                  ####

@@ -1,4 +1,9 @@
-get_topics_and_sections <- function(pkg) {
+get_topics_and_sections <- function(pkg, package) {
+  # data contains package data
+  assertthat::assert_that(all(c("id", "ix") %in% names(package)))
+  data <- package
+
+  # run through pkgdown
   pkg <- as_pkgdown(pkg)
   pkg <- section_init(pkg, depth = 1L) # init topics index
 
@@ -68,11 +73,16 @@ get_topics_and_sections <- function(pkg) {
   topics_data <- topics %>% purrr::transpose() %>% map(list_reference_topic, pkg = pkg)
   names(topics_data) <- topics$name
 
-  lst(
-    topics,
-    sections,
-    topics_data
+  c(
+    data,
+    lst(
+      topics,
+      sections,
+      topics_data,
+      package = pkg$package
+    )
   )
+
 }
 
 
