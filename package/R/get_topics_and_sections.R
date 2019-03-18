@@ -5,12 +5,10 @@ get_topics_and_sections <- function(pkg) {
   # get information on sections in reference
   meta_sections <- pkg$meta[["reference"]]
   if (is.null(meta_sections)) {
-    meta_sections <- tibble(title = "Other", id = "other", desc = "", matchers = list(NULL))
+    meta_sections <- tibble(title = "Other", id = "other", desc = "")
   } else {
     meta_sections <- meta_sections %>%
-      dynutils::list_as_tibble() %>%
-      rename(matchers = contents)
-    meta_sections$id <- map_chr(meta_sections$title, make_slug)
+      dynutils::list_as_tibble()
     meta_sections <- meta_sections %>% add_row(title = "Other", id = "other", desc = "")
   }
 
@@ -25,6 +23,7 @@ get_topics_and_sections <- function(pkg) {
   source <- purrr::map(rd, extract_source)
   funs <- purrr::map(rd, topic_funs)
   file_in <- names(rd)
+  keywords <- purrr::map(rd, extract_tag, "tag_keyword")
 
   topics <- tibble::tibble(
     name = names,
@@ -38,19 +37,14 @@ get_topics_and_sections <- function(pkg) {
     internal = internal
   )
 
-  # find for each topic its section
-  match_env <- match_env(topics)
-  topics$section_id <- map(meta_sections$matchers, function(matchers) {
-    indexes <- purrr::map(matchers, match_eval, env = match_env(topics)) %>% unlist()
-    seq_len(nrow(topics)) %in% indexes
-  }) %>%
-    set_names(meta_sections$id) %>%
-    transpose() %>%
-    map_chr(function(matched) {
-      section_ids <- names(matched)[as.logical(matched)]
-      section_ids <- c(section_ids, "other")
-      first(section_ids)
-    })
+  topics$section_id <- map_chr(keywords, function(keywords) {
+    intersect <- intersect(keywords, meta_sections$id)
+    if (length(intersect) > 0) {
+      first(intersect)
+    } else {
+      "other"
+    }
+  })
 
   # create file of doc
   topics$path <- str_glue("/reference/{pkg$package}/{topics$section_id}/{topics$name}")
