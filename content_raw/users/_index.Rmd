@@ -1,5 +1,7 @@
 ---
 title: "Method users"
+menuTitle: "Method users"
+menuLogo: /images/dyno/dyno1.png
 chapter: true
 weight: 1
 ---

@@ -35,9 +35,10 @@ packages <- tribble(
 
 blogdown::stop_server()
 if (fs::dir_exists("content")) fs::dir_delete("content")
-processx::run("cp", c("-Rl", paste0(getwd(), "/content_raw/"), "content/"), echo = TRUE) # symlink content_raw
+processx::run("rsync", c("-r", "--update", paste0(getwd(), "/content_raw/"), "content"), echo = TRUE) # copy raw content
+processx::run("rsync", c("-r", "--update", paste0(getwd(), "/static_raw/"), "static"), echo = TRUE) # copy raw static
 
-#   ____________________________________________________________________________
+  #   ____________________________________________________________________________
 #   Vignettes                                                               ####
 
 # define vignettes
@@ -103,8 +104,8 @@ get_topic_data <- function(pkg_data, topic_name) {
 }
 
 package <- packages %>% extract_row_to_list(1)
-walk(transpose(packages %>% filter(id == "dynplot")), function(package) {
-# walk(transpose(packages), function(package) {
+# walk(transpose(packages %>% filter(id == "dynplot")), function(package) {
+walk(transpose(packages), function(package) {
   pkg <- as_pkgdown(package$folder)
   pkg_data <- get_topics_and_sections(pkg, package = package)
 
@@ -133,6 +134,7 @@ walk(transpose(packages %>% filter(id == "dynplot")), function(package) {
 
 #   ____________________________________________________________________________
 #   Render                                                                  ####
+knitr::opts_chunk$set(collapse=TRUE, results="hold")
 args = commandArgs(trailingOnly=TRUE)
 if (length(args) > 0 && args[1] == "build") {
   blogdown::build_site()

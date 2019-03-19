@@ -14,6 +14,16 @@ weight: {{{ix}}}
   }
 </style>
 
+<div id="TOC">
+  <ul>
+    {{#sections}}
+    <li>
+    <a href="#{{id}}">{{title}}</a>
+    </li>
+    {{/sections}}
+  </ul>
+</div>
+
 <div class="row">
   <table class="ref-index">
 
@@ -25,7 +35,7 @@ weight: {{{ix}}}
   {{#sections}}<tbody>
     <tr>
       <th colspan="2">
-        <h2 id="{{slug}}" class="hasAnchor"><a href="#{{slug}}" class="anchor"></a>{{title}}</h2>
+        <h2 id="{{id}}" class="hasAnchor"><a href="#{{id}}" class="anchor"></a>{{title}}</h2>
         <p class="section-desc">{{{desc}}}</p>
       </th>
     </tr>

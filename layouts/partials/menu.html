@@ -31,7 +31,7 @@
         <ul>
           {{ range sort . "Weight"}}
               <li>
-                  {{.Pre}}<a class="padding" href="{{.URL | absLangURL }}">{{safeHTML .Name}}</a>{{.Post}}
+                  {{.Pre}}<a class="padding" href="{{.URL | absLangURL }}">{{.Name}}</a>{{.Post}}
               </li>
           {{end}}
         </ul>
@@ -87,6 +87,14 @@
       {{ partial "menu-footer.html" . }}
     </section>
   </div>
+
+  <script type="text/javascript">
+  // scrolling towards active section once page has loaded
+  window.onload = function() {
+    var el = document.getElementById('scroll');
+    el.scrollIntoView(true);
+  }
+  </script>
 </nav>
 
 <!-- templates -->
@@ -97,14 +105,19 @@
 {{ $currentNode := .currentnode }}
  {{with .sect}}
   {{if .IsSection}}
-    {{safeHTML .Params.head}}
+    {{.Params.head}}
     <li data-nav-id="{{.URL}}" title="{{.Title}}" class="dd-item
         {{if eq .UniqueID $currentNode.UniqueID}}active{{end}}
         {{if .IsAncestor $currentNode }}parent{{end}}
         menu-section
-        ">
+        "
+        {{if .IsAncestor $currentNode}} id="scroll" {{end}}
+      >
       <a href="{{.RelPermalink}}">
-          {{safeHTML .Params.Pre}}{{or .Params.menuTitle .LinkTitle .Title}}{{safeHTML .Params.Post}}
+          {{.Params.Pre}}{{or .Params.menuTitle .LinkTitle .Title}}{{.Params.Post}}
+          {{ if .Params.menuLogo }}
+            <img src="{{.Params.menuLogo}}" alt="logo" class="menu-logo zoom">
+          {{ end }}
           {{ if $showvisitedlinks}}
             <i class="fas fa-check read-icon"></i>
           {{ end }}
@@ -140,7 +153,7 @@
     {{ if not .Params.Hidden }}
       <li data-nav-id="{{.URL}}" title="{{.Title}}" class="dd-item {{if eq .UniqueID $currentNode.UniqueID}}active{{end}}">
         <a href="{{ .RelPermalink}}">
-        {{safeHTML .Params.Pre}}{{or .Params.menuTitle .LinkTitle .Title}}{{safeHTML .Params.Post}}
+        {{.Params.Pre}}{{or .Params.menuTitle .LinkTitle .Title}}{{.Params.Post}}
         {{ if $showvisitedlinks}}<i class="fas fa-check read-icon"></i>{{end}}
         </a>
     </li>
@@ -160,14 +173,14 @@
 {{ $currentNode := .currentnode }}
  {{with .sect}}
   {{if .IsSection}}
-    {{safeHTML .Params.head}}
+    {{.Params.head}}
     <li data-nav-id="{{.URL}}" title="{{.Title}}" class="dd-item
         {{if .IsAncestor $currentNode }}parent{{end}}
         {{if eq .UniqueID $currentNode.UniqueID}}active{{end}}
         menu-subsection
         ">
       <a href="{{.RelPermalink}}">
-          {{safeHTML .Params.Pre}}{{or .Params.menuTitle .LinkTitle .Title}}{{safeHTML .Params.Post}}
+          {{.Params.Pre}}{{or .Params.menuTitle .LinkTitle .Title}}{{.Params.Post}}
           {{ if $showvisitedlinks}}
             <i class="fas fa-check read-icon"></i>
           {{ end }}
@@ -203,7 +216,7 @@
     {{ if not .Params.Hidden }}
       <li data-nav-id="{{.URL}}" title="{{.Title}}" class="dd-item {{if eq .UniqueID $currentNode.UniqueID}}active{{end}}">
         <a href="{{ .RelPermalink}}">
-        {{safeHTML .Params.Pre}}{{or .Params.menuTitle .LinkTitle .Title}}{{safeHTML .Params.Post}}
+        {{.Params.Pre}}{{or .Params.menuTitle .LinkTitle .Title}}{{.Params.Post}}
         {{ if $showvisitedlinks}}<i class="fas fa-check read-icon"></i>{{end}}
         </a>
     </li>
@@ -221,7 +234,7 @@
 {{ $currentNode := .currentnode }}
  {{with .sect}}
   {{if .IsSection}}
-    {{safeHTML .Params.head}}
+    {{.Params.head}}
     <li data-nav-id="{{.URL}}" title="{{.Title}}" class="dd-item
         {{if .IsAncestor $currentNode }}parent{{end}}
         {{if eq .UniqueID $currentNode.UniqueID}}active{{end}}
@@ -229,7 +242,8 @@
         menu-item
         ">
       <a href="{{.RelPermalink}}">
-          {{safeHTML .Params.Pre}}{{or .Params.menuTitle .LinkTitle .Title}}{{safeHTML .Params.Post}}
+          {{.Params.Pre}}{{or .Params.menuTitle .LinkTitle .Title}}{{.Params.Post}}
+
           {{ if $showvisitedlinks}}
             <i class="fas fa-check read-icon"></i>
           {{ end }}
@@ -265,7 +279,7 @@
     {{ if not .Params.Hidden }}
       <li data-nav-id="{{.URL}}" title="{{.Title}}" class="dd-item {{if eq .UniqueID $currentNode.UniqueID}}active{{end}}">
         <a href="{{ .RelPermalink}}">
-        {{safeHTML .Params.Pre}}{{or .Params.menuTitle .LinkTitle .Title}}{{safeHTML .Params.Post}}
+        {{.Params.Pre}}{{or .Params.menuTitle .LinkTitle .Title}}{{.Params.Post}}
         {{ if $showvisitedlinks}}<i class="fas fa-check read-icon"></i>{{end}}
         </a>
     </li>

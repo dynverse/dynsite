@@ -1,19 +1,25 @@
 ---
 title: "Quick start"
-output: html_vignette
+output:
+  blogdown::html_page:
+    toc: true
 weight: 2
 ---
 
 ## Trajectory inference workflow
 
-```{r}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse=TRUE, results="hold")
+```
+
+```{r, results='hide', message=FALSE, warning=FALSE}
 library(dyno)
 library(tidyverse)
 ```
 
 The whole trajectory inference workflow is divided in several steps:
 
-![](images/dyno/toolkit.png)
+![](/images/dyno/toolkit.png)
 
 ## Preparing the data
 
@@ -43,7 +49,7 @@ methods_selected <- guidelines$methods_selected
 methods_selected
 ```
 
-![](man/figures/dynguidelines.gif)
+![](/images/dyno/dynguidelines.gif)
 
 
 ## Running the methods
@@ -187,8 +193,9 @@ plot_heatmap(
 )
 ```
 
-```{r, branching_point_dimred}
+```{r, branching_point_dimred, message = FALSE}
 space <- dyndimred::dimred_mds(dataset$expression)
+
 map(branching_point_features[1:12], function(feature_oi) {
   plot_dimred(model, dimred = space, expression_source = dataset$expression, feature_oi = feature_oi, label_milestones = FALSE) +
     theme(legend.position = "none") +
