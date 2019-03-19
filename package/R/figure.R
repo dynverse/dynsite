@@ -55,7 +55,7 @@ fig_save <- function(plot,
 
   paste0(
     "<div class='img'>",
-    "<img src='", escape_html(rel_path), "' alt='' width='", width, "' height='", height, "' />",
+    "<img src='", escape_html(rel_path), "' alt='", name, "' width='", width, "' height='", height, "' />",
     "</div>"
   )
 }
