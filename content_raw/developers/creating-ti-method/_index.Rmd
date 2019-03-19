@@ -1,6 +1,11 @@
 ---
 title: "Creating a TI method"
-chapter: true
 weight: 2
 ---
+
+There are three ways to wrap a TI method:
+
+- [**Directly through R**](create_ti_method_barebones): Using R packages as dependencies, and using R to read in the data, infer the trajectory and return a trajectory model. This has the least overhead, although you're restricted to R.
+- [**Using a wrapper script**](create_ti_method_script): A wrapper script in python/R/... that will read the data, infer the trajectory and save the output
+- [**Using a container**](create_ti_method_container): A container in which any dependencies are installed, and which calls a wrapper script internally. This has the largest learning curve, but is the easiest to use on different execution environments and the easiest to distribute to users.
 

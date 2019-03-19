@@ -38,7 +38,7 @@ if (fs::dir_exists("content")) fs::dir_delete("content")
 processx::run("rsync", c("-r", "--update", paste0(getwd(), "/content_raw/"), "content"), echo = TRUE) # copy raw content
 processx::run("rsync", c("-r", "--update", paste0(getwd(), "/static_raw/"), "static"), echo = TRUE) # copy raw static
 
-  #   ____________________________________________________________________________
+#   ____________________________________________________________________________
 #   Vignettes                                                               ####
 
 # define vignettes

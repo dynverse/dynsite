@@ -1,4 +1,4 @@
 ---
 title: "Example analyses"
-weight: 3
+weight: 4
 ---

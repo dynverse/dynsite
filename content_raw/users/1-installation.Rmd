@@ -10,8 +10,9 @@ weight: 1
 knitr::opts_chunk$set(collapse=TRUE, results="hold")
 ```
 
-*dyn*o contains and loads several of the dynverse R packages (dynwrap, dynplot, dynmethods, ...), each 
-To install (and update) them all, do:
+## Dyno
+
+*dyn*o contains and loads several of the dynverse R packages (dynwrap, dynplot, dynmethods, ...). To install (and update) them all:
 
 ``` r
 # install.packages("devtools")
@@ -25,7 +26,7 @@ On Linux, you will need to install udunits and ImageMagick:
 
 [Docker](https://docs.docker.com/install) or [Singularity](https://www.sylabs.io/guides/3.0/user-guide/) (version ≥ 3.0) has to be installed to run TI methods. We suggest docker on Windows and MacOS, while both docker and singularity are fine when running on linux. Singularity is strongly recommended when running the method on shared computing clusters.
 
-### Docker
+## Docker
 
 For windows 10 you can install [Docker CE](https://store.docker.com/editions/community/docker-ce-desktop-windows), older Windows installations require the [Docker toolbox](https://docs.docker.com/toolbox/overview/).
 
@@ -37,7 +38,7 @@ dynwrap::test_docker_installation(detailed = TRUE)
 
 This command will give helpful tips if some parts of the installation are missing.
 
-### Singularity
+## Singularity
 
 Installation instructions can be found here: [https://www.sylabs.io/docs/](https://www.sylabs.io/docs/). Make sure that version ≥ 3 is installed.
 
@@ -57,7 +58,7 @@ Dyno uses several R packages from Github and to do this it uses the GitHub API. 
 
 - Use `usethis::browse_github_pat()` to create a GitHub token
 - Use `usethis::edit_r_environ()` and add the environment variable with `GITHUB_PAT = 'your_github_token`. 
-- Restart R so that the GITHUB_PAT is read and reinstall dyno
+- Restart R (so that the GITHUB_PAT is read) and try to reinstall: `devtools::install_github("dynverse/dyno")`
 
 ### I'm not allowed to install docker on my shared cluster
 

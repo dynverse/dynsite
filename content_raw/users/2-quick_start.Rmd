@@ -17,6 +17,8 @@ library(dyno)
 library(tidyverse)
 ```
 
+This tutorial quickly guides you through the main steps in the dyno workflow. For each step, we also provide a more in-depth tutorial in the [workflow](../3-workflow) section.
+
 The whole trajectory inference workflow is divided in several steps:
 
 ![](/images/dyno/toolkit.png)
@@ -34,7 +36,9 @@ dataset <- wrap_expression(
 )
 ```
 
-### Selecting the most optimal TI methods
+[➽ An in-depth tutorial for preparing your data](../3-workflow/1-preparing)
+
+### Selecting the best methods for a dataset
 
 When the data is wrapped, the most performant and scalable set of tools can be selected using a shiny app. This app will select a set of methods which are predicted to produce the most optimal output given several user-dependent factors (such as prior expectations about the topology present in the data) and dataset-dependent factors (such as the size of the dataset). This app uses the benchmarking results from [dynbenchmark](https://github.com/dynverse/dynbenchmark) ([doi:10.1101/276907](https://doi.org/10.1101/276907)).
 
@@ -51,6 +55,7 @@ methods_selected
 
 ![](/images/dyno/dynguidelines.gif)
 
+[➽ An in-depth tutorial for selecting the most optimal set of methods](../3-workflow/2-guidelines)
 
 ## Running the methods
 
@@ -69,34 +74,13 @@ if (is.na(first(model))) {
 }
 ```
 
-## Interpreting the trajectory biologically
-In most cases, some knowledge is present of the different start, end or intermediary states present in the data, and this can be used to adapt the trajectory so that it is easier to interpret.
-
-
-### Rooting
-Most methods have no direct way of inferring the directionality of the trajectory. In this case, the trajectory should be "rooted" using some external information, for example by using a set of marker genes.
+Let's first quickly plot the results so that we get an idea of how the trajectory looks like.
 
 ```{r}
-model <- model %>% 
-  add_root_using_expression(c("Vim"), dataset$expression)
+plot_dimred(model)
 ```
 
-
-### Milestone labelling
-
-Milestones can be labelled using marker genes. These labels can then be used for subsequent analyses and for visualisation.
-
-```{r}
-model <- label_milestones_markers(
-  model,
-  markers = list(
-    MEF = c("Vim"),
-    Myocyte = c("Myl1"),
-    Neuron = c("Stmn3")
-  ),
-  dataset$expression
-)
-```
+[➽ An in-depth tutorial for running the methods](../3-workflow/3-running)
 
 
 ## Plotting the trajectory
@@ -134,7 +118,38 @@ plot_dimred(
 )
 ```
 
+[➽ An in-depth tutorial for visualising the models](../3-workflow/4-visualisation)
 
+## Interpreting the trajectory biologically
+
+In most cases, some knowledge is present of the different start, end or intermediary states present in the data, and this can be used to adapt the trajectory so that it is easier to interpret.
+
+### Rooting
+Most methods have no direct way of inferring the directionality of the trajectory. In this case, the trajectory should be "rooted" using some external information, for example by using a set of marker genes.
+
+```{r}
+model <- model %>% 
+  add_root_using_expression(c("Vim"), dataset$expression)
+```
+
+
+### Milestone labelling
+
+Milestones can be labelled using marker genes. These labels can then be used for subsequent analyses and for visualisation.
+
+```{r}
+model <- label_milestones_markers(
+  model,
+  markers = list(
+    MEF = c("Vim"),
+    Myocyte = c("Myl1"),
+    Neuron = c("Stmn3")
+  ),
+  dataset$expression
+)
+```
+
+[➽ An in-depth tutorial for adapting the trajectory](../3-workflow/5-adapting)
 
 ## Predicting and visualising genes of interest
 
@@ -174,7 +189,6 @@ plot_heatmap(
 )
 ```
 
-
 ### Genes important at bifurcation points
 
 We can also extract features which change at the branching point
@@ -202,3 +216,5 @@ map(branching_point_features[1:12], function(feature_oi) {
     ggtitle(feature_oi)
 }) %>% patchwork::wrap_plots()
 ```
+
+[➽ An in-depth tutorial for finding trajectory differentially expressed genes](../3-workflow/6-tde)
