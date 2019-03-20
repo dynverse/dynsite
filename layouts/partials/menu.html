@@ -119,7 +119,7 @@
       <a href="{{.RelPermalink}}">
           {{.Params.Pre}}{{or .Params.menuTitle .LinkTitle .Title}}{{.Params.Post}}
           {{ if .Params.menuLogo }}
-            <img src="{{.Params.menuLogo}}" alt="logo" class="menu-logo zoom">
+            <img src="{{.Params.menuLogo}}" alt="logo" class="menu-logo zoom {{if .IsAncestor $currentNode }}zoomed{{end}}">
           {{ end }}
           {{ if $showvisitedlinks}}
             <i class="fas fa-check read-icon"></i>

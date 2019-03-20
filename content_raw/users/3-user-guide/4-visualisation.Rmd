@@ -1,0 +1,193 @@
+---
+title: "Visualising the trajectory"
+output:
+  blogdown::html_page:
+    toc: true
+weight: 4
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse=TRUE, results="hold")
+```
+
+```{r, results='hide', message=FALSE, warning=FALSE}
+library(dyno)
+library(tidyverse)
+```
+
+The main functions for plotting a trajectory are included in the [dynplot package](/reference/dynplot).
+
+We'll use an example toy dataset
+```{r}
+set.seed(1)
+dataset <- dyntoy::generate_dataset(model = "bifurcating", num_cells = 200)
+```
+
+To visualise a trajectory, you have to take into acount two things:
+
+* Where will I place the trajectory and cells in my 2D space
+* What do I want to visualise along the trajectory based on color
+
+Depending on the answer on these two questions, you will need different visualisations:
+
+```{r cells, fig.width=15, fig.height=10, echo=FALSE, message=FALSE}
+feature_oi <- dataset$feature_info$feature_id[[1]]
+grouping <- group_onto_nearest_milestones(dataset)
+
+empty <- ggplot() + theme_void()
+question <- empty + geom_text(aes(0, 0, label="????"))
+unavailable <- empty + geom_text(aes(0, 0, label="----"))
+titles <- ggplot() + geom_text(aes(x=1, y = 0.5, label = "Color")) + geom_text(aes(x=0.5, y = 0, label = "Position")) + geom_segment(aes(x=0.2, y=0.8, xend=1, yend=0), color = "#666666") + theme_void() + scale_x_continuous(limits = c(0, 1)) + scale_y_continuous(limits = c(0, 1))
+title <- list(
+  titles, 
+  # empty + geom_label(aes(0, 0, label="Topology")),
+  empty + geom_label(aes(0, 0, label="Ordering")),
+  empty + geom_label(aes(0, 0, label="Cell grouping")),
+  empty + geom_label(aes(0, 0, label="Feature expression")), 
+  empty + geom_label(aes(0, 0, label="Pseudotime"))
+)
+dendro <- list(
+  empty + geom_label(aes(0, 0, label="Dendrogram")),
+  # plot_dendro(dataset),
+  plot_dendro(dataset, "milestone"),
+  plot_dendro(dataset, grouping=grouping, groups=groups),
+  plot_dendro(dataset, feature_oi=feature_oi),
+  plot_dendro(dataset, "pseudotime")
+)
+onedim <- list(
+    empty + geom_label(aes(0, 0, label="Onedim")),
+    # plot_onedim(dataset),
+    plot_onedim(dataset, "milestone"),
+    plot_onedim(dataset, grouping=grouping, groups=groups),
+    plot_onedim(dataset, feature_oi=feature_oi),
+    plot_onedim(dataset, "pseudotime")
+  )
+graph <- list(
+  empty + geom_label(aes(0, 0, label="Graph")),
+  # plot_graph(dataset),
+  plot_graph(dataset, "milestone"),
+  plot_graph(dataset, grouping=grouping, groups=groups),
+  plot_graph(dataset, feature_oi=feature_oi),
+  plot_graph(dataset, "pseudotime")
+)
+dimred <- list(
+  empty + geom_label(aes(0, 0, label="Dimensionality reduction")),
+  # plot_dimred(dataset),
+  plot_dimred(dataset, "milestone"),
+  plot_dimred(dataset, grouping=grouping, groups=groups),
+  plot_dimred(dataset, feature_oi=feature_oi),
+  plot_dimred(dataset, "pseudotime")
+)
+patchwork::wrap_plots(
+  c(title, dendro, onedim, graph, dimred),
+  nrow=5,
+  byrow=TRUE
+) & theme(legend.position = "none")
+```
+
+## Visualising the trajectory on a dimensionality reduction
+
+The most common way to visualise a trajectory is to plot it on a dimensionality reduction of the cells. Often (but not always), a TI method will already output a dimensionality reduction itself, which was used to construct the trajectory. For example:
+
+```{r}
+model <- infer_trajectory(dataset, ti_mst())
+head(get_dimred(model), 5)
+```
+Dynplot will use this dimensionality reduction if available, otherwise it will calculate a dimensionality reduction under the hood:
+
+```{r}
+plot_dimred(model)
+```
+
+You can also supply it with your own dimensionality reduction. In this case, the trajectory will be _projected_ onto this dimensionality reduction.
+```{r}
+dimred <- dyndimred::dimred_umap(dataset$expression)
+plot_dimred(model, dimred = dimred)
+```
+
+On this plot, you can color the cells according to 
+
+1. **Cell ordering**. In which every milestone gets a color and the color changes gradually between the milestones. This is the default.
+2. **Cell grouping**. A character vector mapping a cell to a group. In this example, we group the cells to their nearest milestone, but typically you will want to supply some external clustering here.
+3. **Feature expression**. In which case you need to supply the `expression_source` which is usually the original dataset, but can be in any format accepted by `dynwrap::get_expression()`.
+4. **Pseudotime**. The distance to a particular root milestone. The [adapting guide](../5-adapting) discusses how to change the root of a trajectory.
+
+```{r, fig.height = 10, fig.width = 10}
+patchwork::wrap_plots(
+  plot_dimred(model) + ggtitle("Cell ordering"),
+  plot_dimred(model, grouping = group_onto_nearest_milestones(model)) + ggtitle("Cell grouping"),
+  plot_dimred(model, feature_oi = "G1", expression_source = dataset) + ggtitle("Feature expression"),
+  plot_dimred(model, "pseudotime", pseudotime = calculate_pseudotime(model)) + ggtitle("Pseudotime")
+)
+```
+
+<div class="notices tip">
+
+The result is just a regular ggplot2 object, so you can change and adapt it further:
+
+```{r}
+plot_dimred(model) + 
+  ggtitle("Cells are amazing") + 
+  annotate("label", x = model$dimred[1, 1], y = model$dimred[1, 2], label = "Amazing cells") +
+  annotate("label", x = model$dimred[2, 1], y = model$dimred[2, 2], label = "Also amazing cells")
+```
+
+
+</div>
+
+## Plotting the trajectory itself
+
+If the dataset is too complex to be visualised using a 2D dimensionality reduction, it can be useful to visualise the trajectory itself. We provide 3 ways to do this:
+
+### Plotting in a dendrogram
+
+When the trajectory has a tree structure and a clear direction, it is often the most intuitive to visualise it as a dendrogram:
+
+```{r}
+plot_dendro(model)
+```
+
+This visualisation hinges on the correct location of a root, which will be further discussed in the [adapting guide](../5-adapting).
+
+Here you can again color the cells in different ways similar as `plot_dimred`, i.e.:
+
+```{r}
+plot_dendro(model, "pseudotime")
+```
+
+### Plotting as a graph
+
+For more complex topologies, which include cycles or disconnected pieces, the trajectory can be visualised as a 2D graph structure.
+
+```{r}
+disconnected_dataset <- dyntoy::generate_trajectory(model = "disconnected", num_cells = 300)
+plot_graph(disconnected_dataset)
+```
+
+### Plotting in one dimension
+
+Sometimes it can be useful to visualise the trajectory in one dimension, so that you can use the other dimension for something else:
+
+```{r}
+plot_onedim(add_root(model))
+```
+
+
+## Visualising many genes along a trajectory
+
+<div class="notices warning">
+Heatmap plotting is currently still experimental.
+</div>
+
+A one-dimensional visualisation is especially useful if you combine it with a heatmap:
+
+```{r}
+plot_heatmap(model, expression_source = dataset)
+```
+
+Selecting relevant features for this heatmap is discussed in a [later guide](../6-tde), but suffice it to say that `plot_heatmap()` by default will plot those features that best explain the main differences over the whole trajectory.
+
+## Current limitations
+
+Plotting of RNA velocity on top of a trajectory would be very _very_ useful, but is not yet included.
+See the issue on github: https://github.com/dynverse/dynplot/issues/29

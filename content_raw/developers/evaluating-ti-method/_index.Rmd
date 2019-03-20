@@ -3,3 +3,44 @@ title: "Evaluating a TI method"
 weight: 3
 ---
 
+```{r}
+library(dynbenchmark)
+library(tidyverse)
+```
+
+Let's say we have a dataset with a gold-standard trajectory
+
+```{r}
+dataset <- dyntoy::generate_dataset(model = "bifurcating")
+```
+
+And run some methods
+
+```{r}
+models <- infer_trajectories(dataset, list(ti_comp1(), ti_mst(), ti_shuffle()))
+```
+
+[dyneval](/reference/dyneval) contains several ways of comparing these two trajectories
+
+Several metrics are sped up by using "waypoint cells":
+
+```{r}
+dataset <- add_cell_waypoints(dataset)
+models$model <- map(models$model, add_cell_waypoints)
+```
+
+Now calculate some metrics
+
+```{r}
+metric_ids <- dyneval::metrics %>% filter(category != "average") %>% pull(metric_id)
+metrics <- map_dfr(models$model, dyneval::calculate_metrics, dataset = dataset, metrics = metric_ids)
+```
+
+```{r}
+bind_cols(metrics, models) %>% 
+  select(method_id, !!metric_ids) %>% 
+  gather("metric_id", "metric_value", -method_id) %>% 
+  ggplot(aes(method_id, metric_id, fill = metric_value)) +
+    geom_tile()
+```
+

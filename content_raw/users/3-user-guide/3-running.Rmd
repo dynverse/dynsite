@@ -1,0 +1,108 @@
+---
+title: "Inferring trajectories"
+output:
+  blogdown::html_page:
+    toc: true
+weight: 3
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse=TRUE, results="hold")
+```
+
+```{r, results='hide', message=FALSE, warning=FALSE}
+library(dyno)
+library(tidyverse)
+```
+
+`dynwrap::infer_trajectory` is the main function to infer a trajectory. It requires two things:
+
+* A dataset, wrapped using `dynwrap::wrap_data`
+* A TI method. This can be one of the `r nrow(dynmethods::methods)` TI method from [dynmethods](/reference/dynmethods), or a name of a method in which case it will retrieve the relevant method from dynmethods.
+
+```{r}
+dataset <- example_dataset
+model <- infer_trajectory(dataset, ti_comp1())
+```
+
+This model now contains the main information on the trajectory, i.e. the `milestone_network` and `progressions`:
+
+```{r}
+model$milestone_network
+```
+
+```{r}
+head(model$progressions, 10)
+```
+
+## Parameters
+
+Optionally, you can also give it some parameters. These are all documented within the relevant functions in [dynmethods](/reference/dynmethods/method) (also available in the [reference](/reference/dynmethods/method) section):
+
+```{r}
+?ti_comp1
+```
+
+```{r, echo=FALSE}
+thefile <- help("ti_comp1", "dynmethods")
+cat(gsub("_\b", "", paste0(capture.output(tools:::Rd2txt(utils:::.getHelpFile(thefile))), collapse = "\n")))
+```
+
+
+```{r}
+dataset <- example_dataset
+model <- infer_trajectory(dataset, ti_comp1(dimred = "landmark_mds"))
+```
+
+## Priors
+
+The method will error if it requires some prior information that is not provided in the dataset. Some methods also have optional prior information, in which case you can give them to the method using the `give_priors` argument:
+
+```{r}
+model <- infer_trajectory(dataset, ti_comp1(), give_priors = c("start_id"))
+```
+
+## Reproducibility
+
+To make the execution of a method reproducible, fix the seed either using `set.seed()` or through the `seed` argument of `infer_trajectory`:
+
+```{r}
+set.seed(1)
+model <- dynwrap::infer_trajectory(dataset, ti_comp1())
+```
+
+## Running multiple methods or datasets
+
+Often it is useful to run multiple methods and/or use multiple datasets. While you easily parallelise this yourself, we provide a helper function for this: `dynwrap::infer_trajectories()`. This function integrates well with future interpretation and plotting functions.
+
+```{r}
+models <- dynwrap::infer_trajectories(
+  dataset, 
+  method = list(ti_comp1(), ti_angle())
+)
+```
+
+This function generates a data frame containing the different models and extra information.
+
+```{r}
+models
+```
+
+## Errors
+
+Some methods can generate errors which are beyond our control. To know what and where a method generated an error, you can turn on the verbosity:
+
+```{r, error = TRUE}
+dataset$expression@x[] <- NA
+model <- dynwrap::infer_trajectory(dataset, ti_comp1(), give_priors = c("start_id"), verbose = TRUE)
+```
+
+## Running from the command line
+
+It is also possible to run each method in dynmethods from the command-line:
+
+```{bash}
+docker run dynverse/ti_comp1 --help
+```
+
+This container will output an HDF5 file, which can be read by tools such as `dynutils::read_h5()`.

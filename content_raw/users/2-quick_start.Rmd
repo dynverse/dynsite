@@ -6,8 +6,6 @@ output:
 weight: 2
 ---
 
-## Trajectory inference workflow
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(collapse=TRUE, results="hold")
 ```
@@ -17,7 +15,7 @@ library(dyno)
 library(tidyverse)
 ```
 
-This tutorial quickly guides you through the main steps in the dyno workflow. For each step, we also provide a more in-depth tutorial in the [workflow](../3-workflow) section.
+This tutorial quickly guides you through the main steps in the dyno workflow. For each step, we also provide a more in-depth tutorial in the [user guide](../3-user-guide) section.
 
 The whole trajectory inference workflow is divided in several steps:
 
@@ -36,9 +34,9 @@ dataset <- wrap_expression(
 )
 ```
 
-[➽ An in-depth tutorial for preparing your data](../3-workflow/1-preparing)
+[➽ An in-depth tutorial for preparing your data](../3-user-guide/1-preparing)
 
-### Selecting the best methods for a dataset
+## Selecting the best methods for a dataset
 
 When the data is wrapped, the most performant and scalable set of tools can be selected using a shiny app. This app will select a set of methods which are predicted to produce the most optimal output given several user-dependent factors (such as prior expectations about the topology present in the data) and dataset-dependent factors (such as the size of the dataset). This app uses the benchmarking results from [dynbenchmark](https://github.com/dynverse/dynbenchmark) ([doi:10.1101/276907](https://doi.org/10.1101/276907)).
 
@@ -55,11 +53,11 @@ methods_selected
 
 ![](/images/dyno/dynguidelines.gif)
 
-[➽ An in-depth tutorial for selecting the most optimal set of methods](../3-workflow/2-guidelines)
+[➽ An in-depth tutorial for selecting the most optimal set of methods](../3-user-guide/2-guidelines)
 
 ## Running the methods
 
-To run a method, it is currently necessary to [have docker installed](#installation). If that's the case, running a method is a one-step-process. We will run the first selected method here:
+To run a method, it is currently necessary to [have either docker or singularity installed](../1-installation). If that's the case, running a method is a one-step-process. We will run the first selected method here:
 
 ``` r
 model <- infer_trajectory(dataset, first(methods_selected))
@@ -74,16 +72,12 @@ if (is.na(first(model))) {
 }
 ```
 
-Let's first quickly plot the results so that we get an idea of how the trajectory looks like.
+Currently, the dynmethod package contains [`r nrow(dynmethods::methods)` methods](/reference/dynmethods)!
 
-```{r}
-plot_dimred(model)
-```
-
-[➽ An in-depth tutorial for running the methods](../3-workflow/3-running)
-
+[➽ An in-depth tutorial for running the methods](../3-user-guide/3-running)
 
 ## Plotting the trajectory
+
 Several visualisation methods provide ways to biologically interpret trajectories. 
 
 Examples include combining a dimensionality reduction, a trajectory model and a cell clustering:
@@ -118,7 +112,7 @@ plot_dimred(
 )
 ```
 
-[➽ An in-depth tutorial for visualising the models](../3-workflow/4-visualisation)
+[➽ An in-depth tutorial for visualising the models](../3-user-guide/4-visualisation)
 
 ## Interpreting the trajectory biologically
 
@@ -149,7 +143,7 @@ model <- label_milestones_markers(
 )
 ```
 
-[➽ An in-depth tutorial for adapting the trajectory](../3-workflow/5-adapting)
+[➽ An in-depth tutorial for adapting the trajectory](../3-user-guide/5-adapting)
 
 ## Predicting and visualising genes of interest
 
@@ -217,4 +211,4 @@ map(branching_point_features[1:12], function(feature_oi) {
 }) %>% patchwork::wrap_plots()
 ```
 
-[➽ An in-depth tutorial for finding trajectory differentially expressed genes](../3-workflow/6-tde)
+[➽ An in-depth tutorial for finding trajectory differentially expressed genes](../3-user-guide/6-tde)

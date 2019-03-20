@@ -1,0 +1,72 @@
+---
+title: "Preparing the data"
+output:
+  blogdown::html_page:
+    toc: true
+weight: 1
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse=TRUE, results="hold")
+```
+
+```{r, results='hide', message=FALSE, warning=FALSE}
+library(dyno)
+library(tidyverse)
+```
+
+The main functions to wrap a dataset are included within the [dynwrap](/reference/dynwrap) package.
+
+## Gene expression data
+
+As input, dynwrap requires raw counts and normalised (log2) expression data. Cells with low expression, doublets and other "bad" cells should already be filtered from this matrix. Features (i.e. genes) may already be filtered, but this is not required. Some methods internally include a feature filtering step, while others can handle a lot of features just fine.
+
+Internally, dynwrap works with a sparse matrix (`dgCMatrix`) which reduces the memory footprint.
+
+```{r}
+dataset <- wrap_expression(
+  expression = example_dataset$expression,
+  counts = example_dataset$counts
+)
+```
+
+## Prior information
+
+Some methods require prior information to be specified. You can add this prior information to the dataset using `dynwrap::add_prior_information`:
+
+```{r}
+dataset <- add_prior_information(
+  dataset,
+  start_id = "Cell1"
+)
+```
+
+## Optional information
+
+### Grouping / clustering
+
+You can add a grouping or clustering to the data using `dynwrap::add_grouping`:
+
+```{r}
+# dataset <- add_grouping(
+#   dataset,
+#   example_dataset$grouping
+# )
+```
+
+### Dimensionality reduction
+
+You can add a grouping or clustering to the data using `dynwrap::add_dimred`. The dimensionality reduction should be a matrix with the same rownames as the original expression matrix.
+
+```{r}
+dataset <- add_dimred(
+  dataset,
+  example_dataset$dimred
+)
+```
+
+## Current limitations
+
+Currently, alternative input data such as ATAC-Seq or cytometry data are not yet supported, although it is possible to simply include this data as expression and counts.
+
+In the near future, we will also add the ability to include [RNA velocity](https://www.nature.com/articles/s41586-018-0414-6) as input. See the discussion at [https://github.com/dynverse/dynwrap/issues/112](https://github.com/dynverse/dynwrap/issues/112).

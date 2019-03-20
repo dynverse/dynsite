@@ -55,7 +55,7 @@ vignettes <- tribble(
   )
 
 # copy vignettes
-fs::file_copy(vignettes$file_original, vignettes$file_rmd, overwrite = FALSE)
+fs::file_copy(vignettes$file_original, vignettes$file_rmd, overwrite = TRUE)
 
 vignette <- extract_row_to_list(vignettes, 1)
 adapt_frontmatter <- function(vignette) {

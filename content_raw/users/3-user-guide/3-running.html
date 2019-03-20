@@ -1,0 +1,163 @@
+
+<div id="TOC">
+<ul>
+<li><a href="#priors">Priors</a></li>
+<li><a href="#reproducibility">Reproducibility</a></li>
+<li><a href="#running-multiple-methods-or-datasets">Running multiple methods or datasets</a></li>
+<li><a href="#errors">Errors</a></li>
+<li><a href="#running-from-the-command-line">Running from the command line</a></li>
+</ul>
+</div>
+
+<pre class="r"><code>library(dyno)
+library(tidyverse)</code></pre>
+<p><code>dynwrap::infer_trajectory</code> is the main function to infer a trajectory. It requires two things:</p>
+<ul>
+<li>A dataset, wrapped using <code>dynwrap::wrap_data</code></li>
+<li>A TI method. This can be one of the 59 TI method from <a href="/reference/dynmethods">dynmethods</a>, or a name of a method in which case it will retrieve the relevant method from dynmethods.</li>
+</ul>
+<p>Optionally, you can also give it some parameters. These are all documented within the relevant functions in <a href="/reference/dynmethods/method">dynmethods</a> (also available in the <a href="/reference/dynmethods/method">reference</a> section):</p>
+<pre class="r"><code>?ti_comp1</code></pre>
+<pre><code>## _I_n_f_e_r_r_i_n_g _a _t_r_a_j_e_c_t_o_r_y _i_n_f_e_r_e_n_c_e _u_s_i_n_g _C_o_m_p_o_n_e_n_t _1
+## 
+## _D_e_s_c_r_i_p_t_i_o_n:
+## 
+##      Will generate a trajectory using Component 1.
+## 
+##      This method was wrapped inside a container.
+## 
+## _U_s_a_g_e:
+## 
+##      ti_comp1(dimred = &quot;pca&quot;, ndim = 2L, component = 1L)
+##      
+## _A_r_g_u_m_e_n_t_s:
+## 
+##   dimred: Which dimensionality reduction method to use. Domain: pca,
+##           mds, tsne, ica, lle, landmark_mds, mds_sammon, mds_isomds,
+##           mds_smacof, umap, dm_diffusionMap. Default: pca. Format:
+##           character.
+## 
+##     ndim: . Domain: U(2, 30). Default: 2. Format: integer.
+## 
+## component: . Domain: U(1, 10). Default: 1. Format: integer.
+## 
+## _V_a_l_u_e:
+## 
+##      A TI method wrapper to be used together with &#39;infer_trajectory&#39;</code></pre>
+<pre class="r"><code>dataset &lt;- example_dataset
+model &lt;- infer_trajectory(dataset, ti_comp1())
+## Loading required namespace: hdf5r</code></pre>
+<p>This model now contains the main information on the trajectory, i.e. the <code>milestone_network</code> and <code>progressions</code>:</p>
+<pre class="r"><code>model$milestone_network
+##              from            to length directed
+## 1 milestone_begin milestone_end      1    FALSE</code></pre>
+<pre class="r"><code>head(model$progressions, 10)
+##    cell_id            from            to percentage
+## 1    Cell1 milestone_begin milestone_end 0.25088041
+## 2    Cell2 milestone_begin milestone_end 0.36976202
+## 3    Cell3 milestone_begin milestone_end 0.56873343
+## 4    Cell4 milestone_begin milestone_end 0.91506325
+## 5    Cell5 milestone_begin milestone_end 0.21259337
+## 6    Cell6 milestone_begin milestone_end 0.91000325
+## 7    Cell7 milestone_begin milestone_end 0.90920327
+## 8    Cell8 milestone_begin milestone_end 0.64542720
+## 9    Cell9 milestone_begin milestone_end 0.60957610
+## 10  Cell10 milestone_begin milestone_end 0.06369673</code></pre>
+<div id="priors" class="section level2">
+<h2>Priors</h2>
+<p>The method will error if it requires some prior information that is not provided in the dataset. Some methods also have optional prior information, in which case you can give them to the method using the <code>give_priors</code> argument:</p>
+<pre class="r"><code>model &lt;- infer_trajectory(dataset, ti_comp1(), give_priors = c(&quot;start_id&quot;))</code></pre>
+</div>
+<div id="reproducibility" class="section level2">
+<h2>Reproducibility</h2>
+<p>To make the execution of a method reproducible, fix the seed either using <code>set.seed()</code> or through the <code>seed</code> argument of <code>infer_trajectory</code>:</p>
+<pre class="r"><code>set.seed(1)
+model &lt;- dynwrap::infer_trajectory(dataset, ti_comp1())</code></pre>
+</div>
+<div id="running-multiple-methods-or-datasets" class="section level2">
+<h2>Running multiple methods or datasets</h2>
+<p>Often it is useful to run multiple methods and/or use multiple datasets. While you can of course easily paralize this yourself, we provide a helper function for this: <code>dynwrap::infer_trajectories()</code>. This function integrates well with future interpretation and plotting functions.</p>
+<pre class="r"><code>models &lt;- dynwrap::infer_trajectories(
+  dataset, 
+  method = list(ti_comp1(), ti_angle())
+)</code></pre>
+<p>This function generates a data frame containing the different models and extra information.</p>
+<pre class="r"><code>models
+## # A tibble: 2 x 7
+##   dataset_ix method_ix dataset_id method_id method_name model      summary 
+##        &lt;int&gt;     &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;       &lt;list&gt;     &lt;list&gt;  
+## 1          1         1 example    comp1     Component 1 &lt;S3: dynw… &lt;tibble…
+## 2          1         2 example    angle     Angle       &lt;S3: dynw… &lt;tibble…</code></pre>
+</div>
+<div id="errors" class="section level2">
+<h2>Errors</h2>
+<p>Some methods can generate errors which are beyond our control. To know what and where a method generated an error, you can turn on the verbosity:</p>
+<pre class="r"><code>dataset$expression@x[] &lt;- NA
+model &lt;- dynwrap::infer_trajectory(dataset, ti_comp1(), give_priors = c(&quot;start_id&quot;), verbose = TRUE)
+## Error: Error during trajectory inference 
+## Loading required package: dynutils
+## Error in svd(x, nu = 0, nv = k) : infinite or missing values in &#39;x&#39;
+## Calls: &lt;Anonymous&gt; ... &lt;Anonymous&gt; -&gt; &lt;Anonymous&gt; -&gt; prcomp.default -&gt; svd
+## Execution halted
+## Executing &#39;comp1&#39; on &#39;example&#39;
+## With parameters: list(dimred = &quot;pca&quot;, ndim = 2L, component = 1L),
+## inputs: expression, and
+## priors : 
+## Input saved to /tmp/RtmpDibW0S/file329d7e0deb51/ti
+## Running /usr/bin/docker run -e &#39;TMPDIR=/tmp2&#39; --workdir /ti/workspace -v \
+##   &#39;/tmp/RtmpDibW0S/file329d7e0deb51/ti:/ti&#39; -v \
+##   &#39;/tmp/RtmpDibW0S/file329d718e045/tmp:/tmp2&#39; &#39;dynverse/ti_comp1:v0.9.9&#39; \
+##   --dataset /ti/input.h5 --output /ti/output.h5
+## Loading required package: dynutils
+## Error in svd(x, nu = 0, nv = k) : infinite or missing values in &#39;x&#39;
+## Calls: &lt;Anonymous&gt; ... &lt;Anonymous&gt; -&gt; &lt;Anonymous&gt; -&gt; prcomp.default -&gt; svd
+## Execution halted</code></pre>
+</div>
+<div id="running-from-the-command-line" class="section level2">
+<h2>Running from the command line</h2>
+<p>It is also possible to run each method in dynmethods from the command-line:</p>
+<pre class="bash"><code>docker run dynverse/ti_comp1 --help
+## Usage: LOCAL=/path/to/folder; MOUNT=/ti; docker run -v $LOCAL:$MOUNT dynverse/ti_comp1
+## 
+## 
+## Options:
+##  -h, --help
+##      Show this help message and exit
+## 
+##  --dataset=DATASET
+##      Filename of the dataset, example: $MOUNT/dataset.(h5|loom). h5 files can be created by cellranger or dyncli.
+## 
+##  --loom_expression_layer=LOOM_EXPRESSION_LAYER
+##      If available, the name of the loom-layer containing normalised log-transformed data.
+## 
+##  --output=OUTPUT
+##      Filename of the output trajectory data, example: $MOUNT/output.h5.
+## 
+##  --parameters=PARAMETERS
+##      A file containing method-specific parameters, example: $MOUNT/parameters.(h5|yml).
+## 
+##  --dimred=DIMRED
+##      Parameter: Which dimensionality reduction method to use
+##      Domain: {pca, mds, tsne, ica, lle, landmark_mds, mds_sammon, mds_isomds, mds_smacof, umap, dm_diffusionMap}
+##      Default: pca
+##      Format: character
+## 
+##  --ndim=NDIM
+##      Parameter: 
+##      Domain: U(2, 30)
+##      Default: 2
+##      Format: integer
+## 
+##  --component=COMPONENT
+##      Parameter: 
+##      Domain: U(1, 10)
+##      Default: 1
+##      Format: integer
+## 
+##  --verbosity=VERBOSITY
+##      The verbosity level: 0 =&gt; none, 1 =&gt; critical (default), 2 =&gt; info, 3 =&gt; debug.
+## 
+##  --seed=SEED
+##      A seed to be set to ensure reproducability.</code></pre>
+<p>This container will output an HDF5 file, which can be read by tools such as <code>dynutils::read_h5()</code>.</p>
+</div>

@@ -1,0 +1,124 @@
+---
+title: "Adapting the trajectory"
+output:
+  blogdown::html_page:
+    toc: true
+weight: 5
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse=TRUE, results="hold")
+```
+
+```{r, results='hide', message=FALSE, warning=FALSE}
+library(dyno)
+library(tidyverse)
+```
+
+## Simplifying
+
+Intermediate milestones can be removed by simplyfing the trajectory:
+
+```{r}
+model <- dyntoy::generate_dataset(model = dyntoy::model_linear(num_milestones = 10))
+simplified <- simplify_trajectory(model)
+```
+
+```{r, echo = FALSE, message = FALSE, fig.height = 3, fig.width = 10}
+patchwork::wrap_plots(
+  plot_onedim(model, label_milestones = TRUE) + ggtitle("Original"),
+  plot_onedim(simplified, label_milestones = TRUE) + ggtitle("Simplified")
+)
+```
+
+
+
+## Rooting
+
+TI methods often do not have an idea where the root of a trajectory is. We provide two ways of rooting a trajectory. After rooting, all other edges will point away from the root.
+
+```{r}
+set.seed(1)
+model <- dyntoy::generate_dataset(model = dyntoy::model_bifurcating())
+```
+
+### Manually
+
+If you know the milestone (or cell) that is at the start of the trajectory, you can directly call `add_root`:
+
+```{r}
+model_rooted <- model %>% add_root(root_milestone_id = "M4")
+```
+
+```{r, echo = FALSE, message = FALSE, fig.width = 10, fig.height = 5}
+patchwork::wrap_plots(
+  plot_dimred(model, label_milestones = TRUE) + ggtitle("Original"),
+  plot_dimred(model_rooted, label_milestones = TRUE) + ggtitle("Rooted at M4")
+)
+```
+
+
+### Using marker genes
+
+If you know some marker genes that are highly expressed at the start of the trajectory, rooting can be done implicitely:
+
+```{r}
+model_rooted <- model %>% add_root_using_expression("G1", expression_source = model)
+```
+
+```{r, echo = FALSE, message = FALSE, fig.width = 10, fig.height = 5}
+patchwork::wrap_plots(
+  plot_dimred(model, label_milestones = TRUE, feature_oi = "G1") + ggtitle("Original"),
+  plot_dimred(model_rooted, label_milestones = TRUE, feature_oi = "G1") + ggtitle("Rooted using G1 expression")
+)
+```
+
+<div class="notices info">
+We will add the ability to root a trajectory based on RNA velocity soon.
+</div>
+
+## Annotating
+
+<div class="notices warning">
+Annotating/labelling milestones is still experimental
+</div>
+
+Similarly as with rooting, there are also two ways to annotate the milestones within a trajectory:
+
+### Manually
+
+```{r}
+model_labelled <- model %>% label_milestones(c(M1 = "start", M2 = "end1", M3 = "decision", M4 = "end2"))
+```
+
+```{r, echo = FALSE, message = FALSE, fig.width = 5, fig.height = 5}
+plot_dimred(model_labelled, label_milestones = TRUE) + ggtitle("Labelled")
+```
+
+
+### Using marker genes
+
+```{r}
+model_labelled <- label_milestones_markers(
+  model,
+  markers = list(
+    G1high = c("G1"),
+    G5high = c("G5"),
+    G3high = c("G3"),
+    G8high = c("G8")
+  )
+)
+```
+
+```{r, echo = FALSE, message = FALSE, fig.width = 5, fig.height = 5}
+plot_dimred(model_labelled, label_milestones = TRUE, feature_oi = "G1") + ggtitle("Labelled")
+```
+
+<div class="notices info">
+The ability to annotate milestones based on external information will be added in the future.
+</div>
+
+## Limitations
+
+It is currently not yet straightforward to "split" an edge of a trajectory.
+

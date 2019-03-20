@@ -1,0 +1,10 @@
+---
+title: "User guide"
+weight: 3
+---
+
+<div class="notices tip">
+
+Throughout this guide, we frequently make use of some [tidyverse](https://tidyverse.org) functions, mainly coming from dplyr, purrr, tibble and ggplot2. While learning the tidyverse functions of course takes some time, in the long run it will make working in R a lot easier. The best way to learn it for people using R is the [R for Data Science book: https://r4ds.had.co.nz/](https://r4ds.had.co.nz/).
+
+</div>

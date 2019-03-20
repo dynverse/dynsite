@@ -1,326 +1,60 @@
-<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<div id="TOC">
+<ul>
+<li><a href="#dyno">Dyno</a></li>
+<li><a href="#docker">Docker</a></li>
+<li><a href="#singularity">Singularity</a></li>
+<li><a href="#frequent-installation-problems">Frequent installation problems</a><ul>
+<li><a href="#api-rate-limit-exceeded"><code>API rate limit exceeded</code></a></li>
+<li><a href="#im-not-allowed-to-install-docker-on-my-shared-cluster">I’m not allowed to install docker on my shared cluster</a></li>
+</ul></li>
+</ul>
+</div>
 
-<head>
-
-<meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="pandoc" />
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-
-
-<title>Installation</title>
-
-
-
-<style type="text/css">code{white-space: pre;}</style>
-<style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
-}
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {  }
-@media screen {
-a.sourceLine::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-
-</style>
-<script>
-// apply pandoc div.sourceCode style to pre.sourceCode instead
-(function() {
-  var sheets = document.styleSheets;
-  for (var i = 0; i < sheets.length; i++) {
-    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
-    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
-      var rule = rules[j];
-      // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
-      var style = rule.style.cssText;
-      // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
-      // replace div.sourceCode by a pre.sourceCode rule
-      sheets[i].deleteRule(j);
-      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
-    }
-  }
-})();
-</script>
-
-
-
-<style type="text/css">body {
-background-color: #fff;
-margin: 1em auto;
-max-width: 700px;
-overflow: visible;
-padding-left: 2em;
-padding-right: 2em;
-font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-font-size: 14px;
-line-height: 1.35;
-}
-#header {
-text-align: center;
-}
-#TOC {
-clear: both;
-margin: 0 0 10px 10px;
-padding: 4px;
-width: 400px;
-border: 1px solid #CCCCCC;
-border-radius: 5px;
-background-color: #f6f6f6;
-font-size: 13px;
-line-height: 1.3;
-}
-#TOC .toctitle {
-font-weight: bold;
-font-size: 15px;
-margin-left: 5px;
-}
-#TOC ul {
-padding-left: 40px;
-margin-left: -1.5em;
-margin-top: 5px;
-margin-bottom: 5px;
-}
-#TOC ul ul {
-margin-left: -2em;
-}
-#TOC li {
-line-height: 16px;
-}
-table {
-margin: 1em auto;
-border-width: 1px;
-border-color: #DDDDDD;
-border-style: outset;
-border-collapse: collapse;
-}
-table th {
-border-width: 2px;
-padding: 5px;
-border-style: inset;
-}
-table td {
-border-width: 1px;
-border-style: inset;
-line-height: 18px;
-padding: 5px 5px;
-}
-table, table th, table td {
-border-left-style: none;
-border-right-style: none;
-}
-table thead, table tr.even {
-background-color: #f7f7f7;
-}
-p {
-margin: 0.5em 0;
-}
-blockquote {
-background-color: #f6f6f6;
-padding: 0.25em 0.75em;
-}
-hr {
-border-style: solid;
-border: none;
-border-top: 1px solid #777;
-margin: 28px 0;
-}
-dl {
-margin-left: 0;
-}
-dl dd {
-margin-bottom: 13px;
-margin-left: 13px;
-}
-dl dt {
-font-weight: bold;
-}
-ul {
-margin-top: 0;
-}
-ul li {
-list-style: circle outside;
-}
-ul ul {
-margin-bottom: 0;
-}
-pre, code {
-background-color: #f7f7f7;
-border-radius: 3px;
-color: #333;
-white-space: pre-wrap; 
-}
-pre {
-border-radius: 3px;
-margin: 5px 0px 10px 0px;
-padding: 10px;
-}
-pre:not([class]) {
-background-color: #f7f7f7;
-}
-code {
-font-family: Consolas, Monaco, 'Courier New', monospace;
-font-size: 85%;
-}
-p > code, li > code {
-padding: 2px 0px;
-}
-div.figure {
-text-align: center;
-}
-img {
-background-color: #FFFFFF;
-padding: 2px;
-border: 1px solid #DDDDDD;
-border-radius: 3px;
-border: 1px solid #CCCCCC;
-margin: 0 5px;
-}
-h1 {
-margin-top: 0;
-font-size: 35px;
-line-height: 40px;
-}
-h2 {
-border-bottom: 4px solid #f7f7f7;
-padding-top: 10px;
-padding-bottom: 2px;
-font-size: 145%;
-}
-h3 {
-border-bottom: 2px solid #f7f7f7;
-padding-top: 10px;
-font-size: 120%;
-}
-h4 {
-border-bottom: 1px solid #f7f7f7;
-margin-left: 8px;
-font-size: 105%;
-}
-h5, h6 {
-border-bottom: 1px solid #ccc;
-font-size: 105%;
-}
-a {
-color: #0033dd;
-text-decoration: none;
-}
-a:hover {
-color: #6666ff; }
-a:visited {
-color: #800080; }
-a:visited:hover {
-color: #BB00BB; }
-a[href^="http:"] {
-text-decoration: underline; }
-a[href^="https:"] {
-text-decoration: underline; }
-
-code > span.kw { color: #555; font-weight: bold; } 
-code > span.dt { color: #902000; } 
-code > span.dv { color: #40a070; } 
-code > span.bn { color: #d14; } 
-code > span.fl { color: #d14; } 
-code > span.ch { color: #d14; } 
-code > span.st { color: #d14; } 
-code > span.co { color: #888888; font-style: italic; } 
-code > span.ot { color: #007020; } 
-code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
-</style>
-
-</head>
-
-<body>
-
-
-
-
-<h1 class="title toc-ignore">Installation</h1>
-
-
-
-<p>You can install dyno from github using:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># install.packages(&quot;devtools&quot;)</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;dynverse/dyno&quot;</span>)</a></code></pre></div>
+<div id="dyno" class="section level2">
+<h2>Dyno</h2>
+<p><em>dyn</em>o contains and loads several of the dynverse R packages (dynwrap, dynplot, dynmethods, …). To install (and update) them all:</p>
+<pre class="r"><code># install.packages(&quot;devtools&quot;)
+devtools::install_github(&quot;dynverse/dyno&quot;)</code></pre>
 <p>On Linux, you will need to install udunits and ImageMagick:</p>
 <ul>
 <li>Debian / Ubuntu / Linux Mint: <code>sudo apt-get install libudunits2-dev imagemagick</code></li>
 <li>Fedora / CentOS / RHEL: <code>sudo dnf install udunits2-devel ImageMagick-c++-devel</code></li>
 </ul>
-<p><a href="https://docs.docker.com/install">Docker</a> has to be installed to run TI methods. See <a href="https://docs.docker.com/install" class="uri">https://docs.docker.com/install</a> for instructions. For windows 10 you can install <a href="https://store.docker.com/editions/community/docker-ce-desktop-windows">Docker CE</a>, older windows installations require the <a href="https://docs.docker.com/toolbox/overview/">Docker toolbox</a>.</p>
+<p><a href="https://docs.docker.com/install">Docker</a> or <a href="https://www.sylabs.io/guides/3.0/user-guide/">Singularity</a> (version ≥ 3.0) has to be installed to run TI methods. We suggest docker on Windows and MacOS, while both docker and singularity are fine when running on linux. Singularity is strongly recommended when running the method on shared computing clusters.</p>
+<div class="notices tip">
+<p>** Hi!**</p>
+</div>
+</div>
+<div id="docker" class="section level2">
+<h2>Docker</h2>
+<p>For windows 10 you can install <a href="https://store.docker.com/editions/community/docker-ce-desktop-windows">Docker CE</a>, older Windows installations require the <a href="https://docs.docker.com/toolbox/overview/">Docker toolbox</a>.</p>
 <p>You can test whether docker is correctly installed by running:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">dynwrap<span class="op">::</span><span class="kw">test_docker_installation</span>(<span class="dt">detailed =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
-<pre><code>## ✔ Docker is installed</code></pre>
-<pre><code>## ✔ Docker daemon is running</code></pre>
-<pre><code>## ✔ Docker is at correct version (&gt;1.0): 1.39</code></pre>
-<pre><code>## ✔ Docker is in linux mode</code></pre>
-<pre><code>## ✔ Docker can pull images</code></pre>
-<pre><code>## ✔ Docker can run image</code></pre>
-<pre><code>## ✔ Docker can mount temporary volumes</code></pre>
-<pre><code>## ✔ Docker test successful -----------------------------------------------------------------</code></pre>
-<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>dynwrap::test_docker_installation(detailed = TRUE)
+## ✔ Docker is installed
+## ✔ Docker daemon is running
+## ✔ Docker is at correct version (&gt;1.0): 1.39
+## ✔ Docker is in linux mode
+## ✔ Docker can pull images
+## ✔ Docker can run image
+## ✔ Docker can mount temporary volumes
+## ✔ Docker test successful -----------------------------------------------------------------
+## [1] TRUE</code></pre>
 <p>This command will give helpful tips if some parts of the installation are missing.</p>
+</div>
+<div id="singularity" class="section level2">
+<h2>Singularity</h2>
+<p>Installation instructions can be found here: <a href="https://www.sylabs.io/docs/">https://www.sylabs.io/docs/</a>. Make sure that version ≥ 3 is installed.</p>
+<p>You can test whether singularity is correctly installed by running:</p>
+<pre class="r"><code>dynwrap::test_singularity_installation(detailed = TRUE)
+## ✔ Singularity is installed
+## ✔ Singularity is at correct version (&gt;=3.0): v3.0.0-13-g0273e90f is installed
+## ✔ Singularity can pull and run a container from Dockerhub
+## ✔ Singularity can mount temporary volumes
+## ✔ Singularity test successful ------------------------------------------------------------
+## [1] TRUE</code></pre>
+<p>This command will give helpful tips if some parts of the installation are missing.</p>
+</div>
 <div id="frequent-installation-problems" class="section level2">
 <h2>Frequent installation problems</h2>
 <div id="api-rate-limit-exceeded" class="section level3">
@@ -329,22 +63,12 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <ul>
 <li>Use <code>usethis::browse_github_pat()</code> to create a GitHub token</li>
 <li>Use <code>usethis::edit_r_environ()</code> and add the environment variable with <code>GITHUB_PAT = 'your_github_token</code>.</li>
-<li>Restart R so that the GITHUB_PAT is read and reinstall dyno</li>
+<li>Restart R (so that the GITHUB_PAT is read) and try to reinstall: <code>devtools::install_github(&quot;dynverse/dyno&quot;)</code></li>
 </ul>
 </div>
+<div id="im-not-allowed-to-install-docker-on-my-shared-cluster" class="section level3">
+<h3>I’m not allowed to install docker on my shared cluster</h3>
+<p>Short answer: use <a href="#singularity">singularity</a></p>
+<p>Docker indeed poses a security risk when ran in a shared environment. Singularity does not have these risks. For local testing, docker is fine.</p>
 </div>
-
-
-
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
-
-</body>
-</html>
+</div>
