@@ -92,11 +92,10 @@
   // scrolling towards active section once page has loaded
   window.onload = function() {
     var el = document.getElementById('scroll');
-    el.scrollIntoView(true);
+    if (el) {
+      el.scrollIntoView(true);
+    }
   }
-
-  var el = document.getElementById('scroll');
-  el.scrollIntoView(true);
   </script>
 </nav>
 

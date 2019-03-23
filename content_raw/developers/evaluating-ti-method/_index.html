@@ -1,0 +1,25 @@
+
+
+<pre class="r"><code>library(dynwrap)
+library(dyneval)
+library(dynmethods)
+library(tidyverse)</code></pre>
+<p>Let’s say we have a dataset with a gold-standard trajectory</p>
+<pre class="r"><code>dataset &lt;- dyntoy::generate_dataset(model = &quot;bifurcating&quot;)</code></pre>
+<p>And run some methods</p>
+<pre class="r"><code>models &lt;- infer_trajectories(dataset, list(ti_comp1(), ti_mst(), ti_shuffle()))
+## Loading required namespace: hdf5r</code></pre>
+<p><a href="/reference/dyneval">dyneval</a> contains several ways of comparing these two trajectories</p>
+<p>Several metrics are sped up by using “waypoint cells”:</p>
+<pre class="r"><code>dataset &lt;- add_cell_waypoints(dataset)
+models$model &lt;- map(models$model, add_cell_waypoints)</code></pre>
+<p>Now calculate some metrics</p>
+<pre class="r"><code>metric_ids &lt;- dyneval::metrics %&gt;% filter(category != &quot;average&quot;) %&gt;% pull(metric_id)
+metrics &lt;- map_dfr(models$model, dyneval::calculate_metrics, dataset = dataset, metrics = metric_ids)
+## Loading required namespace: netdist</code></pre>
+<pre class="r"><code>bind_cols(metrics, models) %&gt;% 
+  select(method_id, !!metric_ids) %&gt;% 
+  gather(&quot;metric_id&quot;, &quot;metric_value&quot;, -method_id) %&gt;% 
+  ggplot(aes(method_id, metric_id, fill = metric_value)) +
+    geom_tile()</code></pre>
+<p><img src="_index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>

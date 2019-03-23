@@ -1,3 +1,5 @@
+#!/usr/bin/env
+
 echo "Deploying to github"
 
 cd public

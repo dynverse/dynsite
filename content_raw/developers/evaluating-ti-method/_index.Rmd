@@ -1,10 +1,19 @@
 ---
 title: "Evaluating a TI method"
+output:
+  blogdown::html_page:
+    toc: true
 weight: 3
 ---
 
-```{r}
-library(dynbenchmark)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse=TRUE, results="hold")
+```
+
+```{r, results='hide', message=FALSE, warning=FALSE}
+library(dynwrap)
+library(dyneval)
+library(dynmethods)
 library(tidyverse)
 ```
 

@@ -223,3 +223,12 @@ div#TOC > ul > li > ul > li > ul > li > a:before {
 	left: 0;
 }
 
+
+
+
+/***** layout ******/
+
+div.container {
+  width: 100%;
+  max-width: 2000px;
+}

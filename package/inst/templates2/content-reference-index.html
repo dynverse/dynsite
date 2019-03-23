@@ -1,8 +1,11 @@
 ---
-title: {{{package}}}
+menuTitle: {{{package}}}
 weight: {{{ix}}}
 ---
 
+<img style="float:right;margin:10px 10px 10px 10px;" src="/{{logo}}">
+
+<h1>{{{package}}}</h1>
 
 <style type="text/css" scoped>
   .ref-index p{
@@ -22,6 +25,14 @@ weight: {{{ix}}}
     </li>
     {{/sections}}
   </ul>
+</div>
+
+<div class="row">
+    {{#recent_changes}}
+    <div class="col-6">
+      {{{text}}}
+    </div>
+    {{/recent_changes}}
 </div>
 
 <div class="row">

@@ -74,7 +74,7 @@ patchwork::wrap_plots(
 ```
 
 <div class="notices info">
-We will add the ability to root a trajectory based on RNA velocity soon.
+We will add the ability to root a trajectory based on RNA velocity soon. See https://github.com/dynverse/dynwrap/issues/115
 </div>
 
 ## Annotating

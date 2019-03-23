@@ -25,7 +25,8 @@ packages <- tribble(
   ~id, ~folder,
   "dynwrap", "../dynwrap",
   "dynplot", "../dynplot",
-  "dynmethods", "../dynmethods"
+  "dynmethods", "../dynmethods",
+  "dyneval", "../libraries/dyneval"
 ) %>%
   mutate(ix = row_number())
 
@@ -58,18 +59,19 @@ vignettes <- tribble(
 fs::file_copy(vignettes$file_original, vignettes$file_rmd, overwrite = TRUE)
 
 vignette <- extract_row_to_list(vignettes, 1)
-adapt_frontmatter <- function(vignette) {
-  front <- rmarkdown::yaml_front_matter(vignette$file_rmd)
-
-  front$title <- vignette$title
-  front$weight <- vignette$ix
-
-  vignette$file_rmd %>%
+adapt_frontmatter <- function(rmd, adapt, front = rmarkdown::yaml_front_matter(rmd)) {
+  front <- purrr::list_modify(front, !!!adapt)
+  rmd %>%
     readr::read_file() %>%
     gsub("---\n.*\n---", paste0("---\n", yaml::as.yaml(front), "\n---"), .) %>%
-    readr::write_file(vignette$file_rmd)
+    readr::write_file(rmd)
 }
-purrr::transpose(vignettes) %>% walk(adapt_frontmatter)
+adapt_frontmatter_vignette <- function(vignette) {
+  front <- rmarkdown::yaml_front_matter(vignette$file_rmd)
+
+  adapt_frontmatter(vignette$file_rmd, list(title = vignette$title, weight = vignette$ix))
+}
+purrr::transpose(vignettes) %>% walk(adapt_frontmatter_vignette)
 
 
 # rmarkdown::render(
@@ -86,6 +88,13 @@ purrr::transpose(vignettes) %>% walk(adapt_frontmatter)
 get_sections_data <- function(pkg_data) {
   data <- pkg_data
   data$sections <- transpose(data$sections)
+  data$recent_changes <- fs::path_abs(pkg_data$folder) %>%
+    dynutils:::process_news() %>%
+    slice(1:2) %>%
+    mutate(text = map_chr(text, ~markdown::markdownToHTML(text = ., fragment.only = TRUE))) %>%
+    transpose()
+
+  data$logo <- fs::file_copy(paste0(pkg_data$folder, "/man/figures/logo.png"), paste0("static/images/logos/", pkg_data$id, ".png"), overwrite = TRUE) %>% fs::path_rel("static/")
   data
 }
 
@@ -103,16 +112,18 @@ get_topic_data <- function(pkg_data, topic_name) {
   c(topic, topic_data)
 }
 
-package <- packages %>% extract_row_to_list(1)
+
+package <- packages %>% extract_row_to_list(4)
 # walk(transpose(packages %>% filter(id == "dynplot")), function(package) {
 walk(transpose(packages), function(package) {
   pkg <- as_pkgdown(package$folder)
   pkg_data <- get_topics_and_sections(pkg, package = package)
 
   # render package index
+  output <- content_path(paste0("reference/", package$id, "/_index.html"))
   template <- system.file("templates2/content-reference-index.html", package = "dynsite") %>% readr::read_lines()
   whisker::whisker.render(template, get_sections_data(pkg_data)) %>%
-    readr::write_lines(content_path(paste0("reference/", package$id, "/")))
+    readr::write_lines(output)
 
   # render sections
   walk(transpose(pkg_data$sections), function(section) {

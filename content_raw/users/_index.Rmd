@@ -8,11 +8,12 @@ weight: 1
 
 # Method users
 
-The **dyno** package offers **end-users** a complete TI pipeline. It features:
+Dyno contains a set of package to infer, visualise and interpret single-cell trajectories.
 
-* a uniform interface to 50+ [TI methods](https://github.com/dynverse/dynmethods#list-of-included-methods),
-* an [interactive guideline tool](https://github.com/dynverse/dyno#selecting-the-most-optimal-ti-methods) to help the user select the most appropriate method, 
-* [streamlined interpretation and visualisation of trajectories](https://github.com/dynverse/dyno#plotting-the-trajectory), including colouring by gene expression or clusters, and
-* downstream analyses such as the [identification of potential marker genes](https://github.com/dynverse/dyno#predicting-and-visualising-genes-of-interest).
+* [Installation](1-installation) for installation instructions.
+* [Quick start](2-quick_start) for getting start with using dyno.
+* [User guide](3-user-guide) guides you through the different parts of dyno
+* [Example analyses](4-example_analyses) contains examples of running methods on real datasets
+* [See the reference](../reference) to get help for specific R functions
 
-Note that dyno is currently still under development.
+Need help? Post an issue on Github ➠ https://github.com/dynverse/dyno/issues

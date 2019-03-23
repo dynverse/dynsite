@@ -6,11 +6,20 @@ chapter: False
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Dynverse
+<div class="container">
+```{r, results='asis', echo = FALSE}
+cat(gsub("  ", "", readr::read_file("./logo-accordion.html")))
+```
 
-**dynverse** is a collection of R packages aimed at supporting the trajectory inference (TI) community on multiple levels: end-users who want to apply TI on their dataset of interest, and developers who seek to easily quantify the performance of their TI method and compare it to other TI methods.
+<div class="row">
+<div class="col-6">
 
-All of these packages were developed as part of a benchmarking study available on [bioRxiv](https://doi.org/10.1101/276907). All source code has been made available in the [dynbenchmark](https://github.com/dynverse/dynbenchmark) repository.
+**dynverse** is a collection of **R packages** aimed at supporting the **trajectory inference (TI)** community on multiple levels: end-users who want to apply TI on their dataset of interest, and developers who seek to easily quantify the performance of their TI method and compare it to other TI methods.
+
+Some of these packages were developed as part of a benchmarking study ➙
+
+</div>
+<div class="col-6">
 
 <blockquote class="citation">
 <p>
@@ -20,22 +29,37 @@ All of these packages were developed as part of a benchmarking study available o
   <span class="wt"></span><span class="rc"></span>Helena Todorov, Yvan Saeys.
 </p>
 <p>
-  [Nature Biotechnology (In press) doi:10.1038/s41587-019-0071-9](https://doi.org/10.1038/s41587-019-0071-9).
+  [Nature Biotechnology (In press) doi:10.1038/s41587-019-0071-9](https://doi.org/10.1038/s41587-019-0071-9)
 </p>
 <p>
-  [bioRxiv (Mar. 2018) doi:10.1101/276907](https://doi.org/10.1101/276907). <span data-badge-popover="bottom" data-badge-type="bar" data-doi="doi:10.1101/276907" data-hide-no-mentions="true" class="altmetric-embed"></span><script async type='text/javascript' src='https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js'></script><span class="__dimensions_badge_embed__" data-doi="10.1101/276907" data-style="small_rectangle" data-legend="hover-bottom"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script><style> .__dimensions_badge_embed__{display:inline!important;}</style>
+  [bioRxiv (Mar. 2018) doi:10.1101/276907](https://doi.org/10.1101/276907) <span data-badge-popover="bottom" data-badge-type="bar" data-doi="doi:10.1101/276907" data-hide-no-mentions="true" class="altmetric-embed"></span><script async type='text/javascript' src='https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js'></script><span class="__dimensions_badge_embed__" data-doi="10.1101/276907" data-style="small_rectangle" data-legend="hover-bottom"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script><style> .__dimensions_badge_embed__{display:inline!important;}</style>
 </p>
 </blockquote>
 
-## End-users
+</div>
+</div>
+
+<div class="row">
+<div class="col-6">
+
+## Want to infer and interpret trajectories?
+
 The **[dyno](/users)** package offers **end-users** a complete TI pipeline. It features:
 
-* a uniform interface to 50+ [TI methods](https://github.com/dynverse/dynmethods#list-of-included-methods),
-* an [interactive guideline tool](https://github.com/dynverse/dyno#selecting-the-most-optimal-ti-methods) to help the user select the most appropriate method, 
-* the [interpretation and visualisation of trajectories](https://github.com/dynverse/dyno#plotting-the-trajectory), including colouring by gene expression or clusters, and
-* downstream analyses such as the [identification of potential marker genes](https://github.com/dynverse/dyno#plotting-relevant-features).
+* a uniform interface to 50+ TI methods,
+* an interactive guideline tool to help the user select the most appropriate method, 
+* the interpretation and visualisation of trajectories, including colouring by gene expression or clusters, and
+* downstream analyses such as the identification of differentially expressed features
 
-## Developers
+## Need help? 
+
+Post an issue on Github ➙ https://github.com/dynverse/dyno
+
+</div>
+<div class="col-6">
+
+## Want to create and evaluate a method?
+
 For developers of existing or new TI methods, **dyno** offers the same features as to end-users. In addition, developers might also want to check out the following packages:
 
 * **[dynmethods](https://github.com/dynverse/dynmethods)**, which is a repository of wrappers for TI methods. If your method has already been included in dynmethods, an [issue](https://github.com/dynverse/dynmethods/issues) will have been created there. 
@@ -43,8 +67,9 @@ For developers of existing or new TI methods, **dyno** offers the same features 
 * **[dynbenchmark](https://github.com/dynverse/dynbenchmark)**, all source code in order to replicate the benchmarking study by Saelens and Cannoodt ([10.1101/276907](https://doi.org/10.1101/276907)).
 * Check out this [overview of all dynverse packages](/reference) for more information of the functionality of each package.
 
-
-
+</div>
+</div>
+</div>
 
 <!-- Switch wt and rc -->
 <style>

@@ -1,6 +1,7 @@
 ---
 title: "Method developers"
 chapter: true
+menuLogo: /images/dynbenchmark/logo.png
 weight: 2
 ---
 

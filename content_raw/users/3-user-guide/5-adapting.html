@@ -1,0 +1,78 @@
+
+<div id="TOC">
+<ul>
+<li><a href="#simplifying">Simplifying</a></li>
+<li><a href="#rooting">Rooting</a><ul>
+<li><a href="#manually">Manually</a></li>
+<li><a href="#using-marker-genes">Using marker genes</a></li>
+</ul></li>
+<li><a href="#annotating">Annotating</a><ul>
+<li><a href="#manually-1">Manually</a></li>
+<li><a href="#using-marker-genes-1">Using marker genes</a></li>
+</ul></li>
+<li><a href="#limitations">Limitations</a></li>
+</ul>
+</div>
+
+<pre class="r"><code>library(dyno)
+library(tidyverse)</code></pre>
+<div id="simplifying" class="section level2">
+<h2>Simplifying</h2>
+<p>Intermediate milestones can be removed by simplyfing the trajectory:</p>
+<pre class="r"><code>model &lt;- dyntoy::generate_dataset(model = dyntoy::model_linear(num_milestones = 10))
+simplified &lt;- simplify_trajectory(model)</code></pre>
+<p><img src="5-adapting_files/figure-html/unnamed-chunk-3-1.png" width="960" /></p>
+</div>
+<div id="rooting" class="section level2">
+<h2>Rooting</h2>
+<p>TI methods often do not have an idea where the root of a trajectory is. We provide two ways of rooting a trajectory. After rooting, all other edges will point away from the root.</p>
+<pre class="r"><code>set.seed(1)
+model &lt;- dyntoy::generate_dataset(model = dyntoy::model_bifurcating())</code></pre>
+<div id="manually" class="section level3">
+<h3>Manually</h3>
+<p>If you know the milestone (or cell) that is at the start of the trajectory, you can directly call <code>add_root</code>:</p>
+<pre class="r"><code>model_rooted &lt;- model %&gt;% add_root(root_milestone_id = &quot;M4&quot;)</code></pre>
+<p><img src="5-adapting_files/figure-html/unnamed-chunk-6-1.png" width="960" /></p>
+</div>
+<div id="using-marker-genes" class="section level3">
+<h3>Using marker genes</h3>
+<p>If you know some marker genes that are highly expressed at the start of the trajectory, rooting can be done implicitely:</p>
+<pre class="r"><code>model_rooted &lt;- model %&gt;% add_root_using_expression(&quot;G1&quot;, expression_source = model)</code></pre>
+<p><img src="5-adapting_files/figure-html/unnamed-chunk-8-1.png" width="960" /></p>
+<div class="notices info">
+<p>We will add the ability to root a trajectory based on RNA velocity soon. See <a href="https://github.com/dynverse/dynwrap/issues/115" class="uri">https://github.com/dynverse/dynwrap/issues/115</a></p>
+</div>
+</div>
+</div>
+<div id="annotating" class="section level2">
+<h2>Annotating</h2>
+<div class="notices warning">
+<p>Annotating/labelling milestones is still experimental</p>
+</div>
+<p>Similarly as with rooting, there are also two ways to annotate the milestones within a trajectory:</p>
+<div id="manually-1" class="section level3">
+<h3>Manually</h3>
+<pre class="r"><code>model_labelled &lt;- model %&gt;% label_milestones(c(M1 = &quot;start&quot;, M2 = &quot;end1&quot;, M3 = &quot;decision&quot;, M4 = &quot;end2&quot;))</code></pre>
+<p><img src="5-adapting_files/figure-html/unnamed-chunk-10-1.png" width="480" /></p>
+</div>
+<div id="using-marker-genes-1" class="section level3">
+<h3>Using marker genes</h3>
+<pre class="r"><code>model_labelled &lt;- label_milestones_markers(
+  model,
+  markers = list(
+    G1high = c(&quot;G1&quot;),
+    G5high = c(&quot;G5&quot;),
+    G3high = c(&quot;G3&quot;),
+    G8high = c(&quot;G8&quot;)
+  )
+)</code></pre>
+<p><img src="5-adapting_files/figure-html/unnamed-chunk-12-1.png" width="480" /></p>
+<div class="notices info">
+<p>The ability to annotate milestones based on external information will be added in the future.</p>
+</div>
+</div>
+</div>
+<div id="limitations" class="section level2">
+<h2>Limitations</h2>
+<p>It is currently not yet straightforward to “split” an edge of a trajectory.</p>
+</div>
