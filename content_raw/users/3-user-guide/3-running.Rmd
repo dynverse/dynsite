@@ -17,11 +17,14 @@ library(tidyverse)
 
 `dynwrap::infer_trajectory` is the main function to infer a trajectory. It requires two things:
 
-* A dataset, wrapped using `dynwrap::wrap_data`
+* A dataset, wrapped using `dynwrap::wrap_expression`
 * A TI method. This can be one of the `r nrow(dynmethods::methods)` TI method from [dynmethods](/reference/dynmethods), or a name of a method in which case it will retrieve the relevant method from dynmethods.
 
 ```{r}
-dataset <- example_dataset
+dataset <- wrap_expression(
+  counts = example_dataset$counts,
+  expression = example_dataset$expression
+)
 model <- infer_trajectory(dataset, ti_comp1())
 ```
 
@@ -50,7 +53,6 @@ cat(gsub("_\b", "", paste0(capture.output(tools:::Rd2txt(utils:::.getHelpFile(th
 
 
 ```{r}
-dataset <- example_dataset
 model <- infer_trajectory(dataset, ti_comp1(dimred = "landmark_mds"))
 ```
 
@@ -59,6 +61,7 @@ model <- infer_trajectory(dataset, ti_comp1(dimred = "landmark_mds"))
 The method will error if it requires some prior information that is not provided in the dataset. Some methods also have optional prior information, in which case you can give them to the method using the `give_priors` argument:
 
 ```{r}
+dataset <- dataset %>% add_prior_information(start_id = example_dataset$prior_information$start_id)
 model <- infer_trajectory(dataset, ti_comp1(), give_priors = c("start_id"))
 ```
 

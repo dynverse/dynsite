@@ -1,5 +1,30 @@
 ---
 title: "About"
-weight: 1
+weight: 4
 ---
 
+dynverse packages were mainly developed by [Robrecht Cannoodt](https://github.com/rcannood) and [Wouter Saelens](https://github.com/zouter), with help from [Helena Todorov](https://github.com/Helena-todd), in the lab of [Yvan Saeys](https://github.com/saeyslab).
+ 
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+ integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+ crossorigin=""></script>
+ 
+<div id="mapid"></div>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+  $('head').append('<link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css">');
+
+  var mymap = L.map('mapid').setView([51.0092853, -3.7053699], 12);
+  
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(mymap);
+
+L.marker([51.5, -0.09]).addTo(mymap)
+    .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
+    .openPopup();
+})
+
+</script>

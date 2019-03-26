@@ -1,4 +1,4 @@
-  <div class="row" style="margin-top:-25px">
+  <div class="row logos">
     <div class="outer-div">
       <div class="inner-div">
         <div class="hex zoom">
@@ -54,13 +54,24 @@
     </div>
   </div>
 <style>
+/* top row: by default more to the top, unless on mobile */
+.row.logos {
+  margin-top:-25px;
+}
+@media only all and (max-width: 47.938em) {
+  .row.logos {
+      margin-top:0px;
+  }
+}
+
 .outer-div { position: relative; float: right; right: 50%; }
-.inner-div { position: relative; float: right; right: -50%; }
+.inner-div { position: relative; float: right; right: -50%; white-space: nowrap  }
 
 .hex {
   display:inline-block;
   margin: 0px 10px 0px 10px;
   text-align: center;
+  width:120px;
 }
 
 .hex img {
@@ -84,4 +95,7 @@
 .hex:hover span {
   opacity: 1;
 }
+
+
+
 </style>

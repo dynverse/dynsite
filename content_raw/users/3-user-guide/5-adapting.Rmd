@@ -73,8 +73,8 @@ patchwork::wrap_plots(
 )
 ```
 
-<div class="notices info">
-We will add the ability to root a trajectory based on RNA velocity soon. See https://github.com/dynverse/dynwrap/issues/115
+<div class="notices future">
+Rooting a trajectory based on RNA velocity is on our todo list. See https://github.com/dynverse/dynwrap/issues/115
 </div>
 
 ## Annotating
@@ -114,11 +114,12 @@ model_labelled <- label_milestones_markers(
 plot_dimred(model_labelled, label_milestones = TRUE, feature_oi = "G1") + ggtitle("Labelled")
 ```
 
-<div class="notices info">
-The ability to annotate milestones based on external information will be added in the future.
+<div class="notices future">
+Annotating milestones based on external information is on our todo list.
 </div>
 
 ## Limitations
 
-It is currently not yet straightforward to "split" an edge of a trajectory.
-
+<div class="notices future">
+Splitting a trajectory and adding intermediate milestones is on our todo list.
+</div>

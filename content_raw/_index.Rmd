@@ -47,9 +47,11 @@ Some of these packages were developed as part of a benchmarking study ➙
 The **[dyno](/users)** package offers **end-users** a complete TI pipeline. It features:
 
 * a uniform interface to 50+ TI methods,
-* an interactive guideline tool to help the user select the most appropriate method, 
-* the interpretation and visualisation of trajectories, including colouring by gene expression or clusters, and
+* an interactive guideline tool to help you select the most appropriate method, 
+* streamlined interpretation and visualisation of trajectories, and
 * downstream analyses such as the identification of differentially expressed features
+
+Check out the [quick started](/users/2-quick_start/) or the [user guide](/users/3-user-guide/).
 
 ## Need help? 
 

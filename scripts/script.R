@@ -4,7 +4,6 @@ library(dynplot)
 library(dynwrap)
 library(dynutils)
 
-
 devtools::load_all("package")
 
 # get content path
@@ -29,6 +28,8 @@ packages <- tribble(
   "dyneval", "../libraries/dyneval"
 ) %>%
   mutate(ix = row_number())
+
+base_url <- "/"
 
 
 #   ____________________________________________________________________________
@@ -115,7 +116,7 @@ get_topic_data <- function(pkg_data, topic_name) {
 
 package <- packages %>% extract_row_to_list(4)
 # walk(transpose(packages %>% filter(id == "dynplot")), function(package) {
-walk(transpose(packages), function(package) {
+topics <- map_dfr(transpose(packages), function(package) {
   pkg <- as_pkgdown(package$folder)
   pkg_data <- get_topics_and_sections(pkg, package = package)
 
@@ -141,6 +142,8 @@ walk(transpose(packages), function(package) {
         readr::write_lines(content_path(topic$path))
     })
   })
+
+  pkg_data$topics
 })
 
 #   ____________________________________________________________________________
@@ -154,3 +157,6 @@ if (length(args) > 0 && args[1] == "build") {
 }
 
 blogdown::stop_server()
+
+
+link_references(topics, "public")
