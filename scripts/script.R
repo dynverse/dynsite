@@ -46,9 +46,10 @@ processx::run("rsync", c("-r", "--update", paste0(getwd(), "/static_raw/"), "sta
 # define vignettes
 vignettes <- tribble(
   ~package, ~file_original, ~folder_output, ~ix, ~title,
-  "dynwrap", "create_ti_method_barebones.Rmd", "developers/creating-ti-method/", 1, "Bare-bones",
-  "dynwrap", "create_ti_method_script.Rmd", "developers/creating-ti-method/", 2, "Wrapper script",
-  "dynwrap", "create_ti_method_container.Rmd", "developers/creating-ti-method/", 4, "Container"
+  "dynwrap", "create_ti_method_wrappers.Rmd", "developers/creating-ti-method/", 1, "Creating a trajectory",
+  "dynwrap", "create_ti_method_r.Rmd", "developers/creating-ti-method/", 2, "Wrapping in R",
+  "dynwrap", "create_ti_method_script.Rmd", "developers/creating-ti-method/", 3, "Wrapper script",
+  "dynwrap", "create_ti_method_container.Rmd", "developers/creating-ti-method/", 4, "Containerised wrapping"
 ) %>%
   mutate(
     file_original = fs::path(deframe(select(packages, id, folder))[package], "vignettes", file_original),
@@ -114,7 +115,7 @@ get_topic_data <- function(pkg_data, topic_name) {
 }
 
 
-package <- packages %>% extract_row_to_list(4)
+package <- packages %>% extract_row_to_list(1)
 # walk(transpose(packages %>% filter(id == "dynplot")), function(package) {
 topics <- map_dfr(transpose(packages), function(package) {
   pkg <- as_pkgdown(package$folder)

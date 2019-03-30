@@ -70,7 +70,7 @@ replay_html.value <- function(x, ...) {
 
 #' @export
 replay_html.source <- function(x, ...) {
-  html <- highlight_text(x$src)
+  html <- highlight_text(trimws(x$src))
   paste0("<div class='input'>", html, "</div>")
 }
 

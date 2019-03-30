@@ -261,6 +261,11 @@ div.container {
 /****** code examples ******/
 
 pre div.input {
+  background-color: #333333;
   padding-left: 5px;
   border-left: 1px solid #DDD;
+}
+
+pre div.input:not(:first-child) {
+  margin-top: 20px;
 }
