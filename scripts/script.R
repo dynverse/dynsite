@@ -149,6 +149,8 @@ topics <- map_dfr(transpose(packages), function(package) {
 
 #   ____________________________________________________________________________
 #   Render                                                                  ####
+processx::run("rsync", c("-r", "--update", paste0(getwd(), "/content_raw/"), "content"), echo = TRUE) # copy raw content
+processx::run("rsync", c("-r", "--update", paste0(getwd(), "/static_raw/"), "static"), echo = TRUE) # copy raw static
 knitr::opts_chunk$set(collapse=TRUE, results="hold")
 args = commandArgs(trailingOnly=TRUE)
 if (length(args) > 0 && args[1] == "build") {

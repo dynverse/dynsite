@@ -3,7 +3,7 @@ title: "Creating a TI method"
 weight: 2
 ---
 
-To wrap a TI method, you first need to understand how dynwrap [**wraps a trajectory model**](creating_a_trajectory)
+To wrap a TI method, you first need to understand how dynwrap [**wraps a trajectory model**](create_ti_method_wrappers)
 
 Once you know how to do that, there are three ways to wrap a TI method:
 

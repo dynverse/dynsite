@@ -163,9 +163,8 @@ f09b
   border-bottom: solid rgba(255, 255, 255, .4) 1px;
 }
 
-
-#sidebar ul.topics > li > a {
-  font-variant: small-caps;
+#sidebar ul.topics > li:hover > a {
+  font-weight: bolder;
 }
 
 
@@ -269,3 +268,8 @@ pre div.input {
 pre div.input:not(:first-child) {
   margin-top: 20px;
 }
+
+
+
+
+

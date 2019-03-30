@@ -4,6 +4,33 @@ weight: 4
 ---
 
 dynverse packages were mainly developed by [Robrecht Cannoodt](https://github.com/rcannood) and [Wouter Saelens](https://github.com/zouter), with help from [Helena Todorov](https://github.com/Helena-todd), in the lab of [Yvan Saeys](https://github.com/saeyslab).
+
+The Saeys lab is within the Center for Inflammation Research of the VIB and Ghent University, Belgium
+
+Wouter and Robrecht are supported by a grant from the FWO.
+
+<div class="container">
+<div class="row logos">
+<div class="col-3">
+<a href="https://www.ugent.be"><img src="/images/logos/ghent_university.png"></a>
+</div>
+<div class="col-3">
+<a href="http://www.vib.be"><img src="/images/logos/vib.gif"></a>
+</div>
+<div class="col-3">
+<a href="https://www.irc.ugent.be"><img src="/images/logos/irc.png"></a>
+</div>
+<div class="col-3">
+<a href="https://www.fwo.be"><img src="/images/logos/fwo.jpeg"></a>
+</div>
+</div>
+</div>
+
+<style>
+.logos img {
+  max-width:175px
+}
+</style>
  
 <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
  integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="

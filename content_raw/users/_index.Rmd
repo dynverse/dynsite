@@ -13,7 +13,6 @@ Dyno contains a set of package to infer, visualise and interpret single-cell tra
 * [Installation](1-installation) for installation instructions.
 * [Quick start](2-quick_start) for getting start with using dyno.
 * [User guide](3-user-guide) guides you through the different parts of dyno
-* [Example analyses](4-example_analyses) contains examples of running methods on real datasets
 * [See the reference](../reference) to get help for specific R functions
 
 Need help? Post an issue on Github ➠ https://github.com/dynverse/dyno/issues
