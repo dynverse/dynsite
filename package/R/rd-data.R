@@ -175,6 +175,9 @@ format_example_chunk <- function(code, run, show,
     return(highlight_text(code))
   }
 
+  # remove example sections that are only run for the website
+  code <- gsub("#-[ ]?", "", code)
+
   withr::with_options(
     list(
       crayon.enabled = getOption("crayon.enabled", crayon::has_color()),

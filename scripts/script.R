@@ -29,7 +29,8 @@ packages <- tribble(
   "dynwrap", "../dynwrap",
   "dynplot", "../dynplot",
   "dynmethods", "../dynmethods",
-  "dyneval", "../libraries/dyneval"
+  "dyneval", "../libraries/dyneval",
+  "dynutils", "../libraries/dynutils"
 ) %>%
   mutate(ix = row_number())
 
@@ -122,6 +123,8 @@ get_topic_data <- function(pkg_data, topic_name) {
 package <- packages %>% extract_row_to_list(1)
 # walk(transpose(packages %>% filter(id == "dynplot")), function(package) {
 topics <- map_dfr(transpose(packages), function(package) {
+  print(package$id)
+
   pkg <- as_pkgdown(package$folder)
   pkg_data <- get_topics_and_sections(pkg, package = package)
 
