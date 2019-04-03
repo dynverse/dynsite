@@ -69,4 +69,4 @@ dataset <- add_dimred(
 
 Currently, alternative input data such as ATAC-Seq or cytometry data are not yet supported, although it is possible to simply include this data as expression and counts.
 
-In the near future, we will also add the ability to include [RNA velocity](https://www.nature.com/articles/s41586-018-0414-6) as input. See the discussion at [https://github.com/dynverse/dynwrap/issues/112](https://github.com/dynverse/dynwrap/issues/112).
+In the near future, we will also add the ability to include [RNA velocity](https://www.nature.com/articles/s41586-018-0414-6) as input. See the discussion at https://github.com/dynverse/dynwrap/issues/112

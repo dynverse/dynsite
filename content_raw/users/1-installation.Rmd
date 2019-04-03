@@ -26,8 +26,8 @@ On Linux, you will need to install udunits and ImageMagick:
 
 [Docker](https://docs.docker.com/install) or [Singularity](https://www.sylabs.io/guides/3.0/user-guide/) (version ≥ 3.0) has to be installed to run TI methods. We suggest docker on Windows and MacOS, while both docker and singularity are fine when running on linux. Singularity is strongly recommended when running the method on shared computing clusters.
 
-<div class="notices tip">
-
+<div class="notices future">
+We're working on wrapping some of the most popular methods directly into R. See https://github.com/dynverse/dynmethods/issues/152
 </div>
 
 ## Docker

@@ -15,9 +15,7 @@ library(dyno)
 library(tidyverse)
 ```
 
-## 
-
-Within [our evaluation study](/about), we compared 45 methods on four aspects:
+Within [our evaluation study](https://doi.org/10.1038/s41587-019-0071-9), we compared 45 methods on four aspects:
 
 * <span style="color:#4292c6;font-weight:bold">Accuracy</span>: How similar is the inferred trajectory to the "true" (or "expected") trajectory in the data. We used several metrics for this, comparing the cellular ordering and topology, and compared against both real datasets, for which a gold standard is not always so well defined, and synthetic data, which are not necessarily as biologically relevant as real data.
 * <span style="color:#f6483a;font-weight:bold">Scalability</span>: How long the method takes to run and how much memory it consumes. This mainly depends on the dimensions of the input data, i.e. the number of cells and features.

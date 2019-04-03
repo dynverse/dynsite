@@ -7,14 +7,18 @@ library(dynutils)
 devtools::load_all("package")
 
 # get content path
-content_path <- function(path, ext = "html") {
+content_path <- function(path, ext = "html", raw = FALSE) {
   map_chr(path, function(path) {
     if (endsWith(path, "/")) {
       path <- paste0(path, "_index", ".", ext)
     } else if (nchar(fs::path_ext(path)) == 0) {
       path <- paste0(path, ".", ext)
     }
-    path <- paste0("content/", path)
+    if (!raw) {
+      path <- paste0("content/", path)
+    } else {
+      path <- paste0("content_raw/", path)
+    }
     fs::dir_create(fs::path_dir(path))
     path
   })
@@ -37,8 +41,8 @@ base_url <- "/"
 
 blogdown::stop_server()
 if (fs::dir_exists("content")) fs::dir_delete("content")
-processx::run("rsync", c("-r", "--update", paste0(getwd(), "/content_raw/"), "content"), echo = TRUE) # copy raw content
-processx::run("rsync", c("-r", "--update", paste0(getwd(), "/static_raw/"), "static"), echo = TRUE) # copy raw static
+processx::run("rsync", c("-r", "--checksum", "--update", paste0(getwd(), "/content_raw/"), "content"), echo = TRUE) # copy raw content
+processx::run("rsync", c("-r", "--checksum", "--update", paste0(getwd(), "/static_raw/"), "static"), echo = TRUE) # copy raw static
 
 #   ____________________________________________________________________________
 #   Vignettes                                                               ####
@@ -53,7 +57,7 @@ vignettes <- tribble(
 ) %>%
   mutate(
     file_original = fs::path(deframe(select(packages, id, folder))[package], "vignettes", file_original),
-    file_rmd = content_path(fs::path(folder_output, fs::path_file(file_original)), "Rmd"),
+    file_rmd = content_path(fs::path(folder_output, fs::path_file(file_original)), "Rmd", raw = TRUE),
     file_out = file_rmd %>% fs::path_ext_remove()
   )
 
@@ -149,8 +153,8 @@ topics <- map_dfr(transpose(packages), function(package) {
 
 #   ____________________________________________________________________________
 #   Render                                                                  ####
-processx::run("rsync", c("-r", "--update", paste0(getwd(), "/content_raw/"), "content"), echo = TRUE) # copy raw content
-processx::run("rsync", c("-r", "--update", paste0(getwd(), "/static_raw/"), "static"), echo = TRUE) # copy raw static
+processx::run("rsync", c("-r", "--checksum", "--update", paste0(getwd(), "/content_raw/"), "content"), echo = TRUE) # copy raw content
+processx::run("rsync", c("-r", "--checksum", "--update", paste0(getwd(), "/static_raw/"), "static"), echo = TRUE) # copy raw static
 knitr::opts_chunk$set(collapse=TRUE, results="hold")
 args = commandArgs(trailingOnly=TRUE)
 if (length(args) > 0 && args[1] == "build") {
