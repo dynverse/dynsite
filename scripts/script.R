@@ -30,7 +30,8 @@ packages <- tribble(
   "dynplot", "../dynplot",
   "dynmethods", "../dynmethods",
   "dyneval", "../libraries/dyneval",
-  "dynutils", "../libraries/dynutils"
+  "dynutils", "../libraries/dynutils",
+  "dyncli", "../libraries/dyncli"
 ) %>%
   mutate(ix = row_number())
 
@@ -53,7 +54,7 @@ vignettes <- tribble(
   ~package, ~file_original, ~folder_output, ~ix, ~title,
   "dynwrap", "create_ti_method_wrappers.Rmd", "developers/creating-ti-method/", 1, "Creating a trajectory",
   "dynwrap", "create_ti_method_r.Rmd", "developers/creating-ti-method/", 2, "Wrapping in R",
-  "dynwrap", "create_ti_method_script.Rmd", "developers/creating-ti-method/", 3, "Wrapper script",
+  "dyncli", "create_ti_method_script.Rmd", "developers/creating-ti-method/", 3, "Wrapper script",
   "dynwrap", "create_ti_method_container.Rmd", "developers/creating-ti-method/", 4, "Containerised wrapping"
 ) %>%
   mutate(

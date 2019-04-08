@@ -135,6 +135,12 @@ plot_dimred(model) +
 
 </div>
 
+<div class="notices future">
+Plotting of RNA velocity on top of a trajectory would be very _very_ useful, but is not yet included.
+See the issue on github: https://github.com/dynverse/dynplot/issues/29
+
+</div>
+
 ## Plotting the trajectory itself
 
 If the dataset is too complex to be visualised using a 2D dimensionality reduction, it can be useful to visualise the trajectory itself. We provide 3 ways to do this:
@@ -186,8 +192,3 @@ plot_heatmap(model, expression_source = dataset)
 ```
 
 Selecting relevant features for this heatmap is discussed in a [later guide](../6-tde), but suffice it to say that `plot_heatmap()` by default will plot those features that best explain the main differences over the whole trajectory.
-
-## Current limitations
-
-Plotting of RNA velocity on top of a trajectory would be very _very_ useful, but is not yet included.
-See the issue on github: https://github.com/dynverse/dynplot/issues/29

@@ -65,6 +65,27 @@ dataset <- dataset %>% add_prior_information(start_id = example_dataset$prior_in
 model <- infer_trajectory(dataset, ti_comp1(), give_priors = c("start_id"))
 ```
 
+An overview of all possible priors is given in the dynwrap tibble:
+
+```r
+dynwrap::priors
+```
+
+```{r, echo = FALSE}
+knitr::kable(dynwrap::priors)
+```
+
+<div class="notices tip">
+You can find all methods that can use a certain type of prior by filtering the `dynmethods::methods`. For example, to find all method wrappers that can use timecourse data:
+
+```{r}
+dynmethods::methods %>%
+  filter(map_lgl(wrapper_inputs, ~ any(c("timecourse_discrete", "timecourse_continuous") %in% .$input_id))) %>% 
+  select(method_id, method_name)
+```
+
+</div>
+
 ## Reproducibility
 
 To make the execution of a method reproducible, fix the seed either using `set.seed()` or through the `seed` argument of `infer_trajectory`:
@@ -76,7 +97,7 @@ model <- dynwrap::infer_trajectory(dataset, ti_comp1())
 
 ## Running multiple methods or datasets
 
-Often it is useful to run multiple methods and/or use multiple datasets. While you easily parallelise this yourself, we provide a helper function for this: `dynwrap::infer_trajectories()`. This function integrates well with future interpretation and plotting functions.
+Often it is useful to run multiple methods and/or use multiple datasets. While you can easily parallelise this yourself, we provide a helper function for this: `dynwrap::infer_trajectories()`. This function integrates well with future interpretation and plotting functions.
 
 ```{r}
 models <- dynwrap::infer_trajectories(
