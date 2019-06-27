@@ -54,6 +54,13 @@ dynwrap::test_singularity_installation(detailed = TRUE)
 
 This command will give helpful tips if some parts of the installation are missing.
 
+<div class="notices tip">
+By default, singularity will place the containers in the .singularity subfolder of the working directory. You can change this by either specifying a `SINGULARITY_CACHEDIR` environment variable, or by running
+```
+dynwrap::set_default_config(dynwrap::create_singularity_config(cache_dir = "..."))
+```
+</div>
+
 ## Frequent installation problems
 
 ### `API rate limit exceeded`

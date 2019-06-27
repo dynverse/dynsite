@@ -38,6 +38,10 @@ model$milestone_network
 head(model$progressions, 10)
 ```
 
+<div class="notices future">
+While running methods inside a docker or singularity container reduces problems with dependencies and makes an analysis more reproducible, it can also create a considerable overhead. We plan to wrap wrap some more "popular" methods directly into R. See https://github.com/dynverse/dynmethods/issues/152 for an overview.
+</div>
+
 ## Parameters
 
 Optionally, you can also give it some parameters. These are all documented within the relevant functions in [dynmethods](/reference/dynmethods/method) (also available in the [reference](/reference/dynmethods/method) section):
