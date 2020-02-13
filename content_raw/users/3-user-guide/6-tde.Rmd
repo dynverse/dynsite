@@ -28,7 +28,7 @@ Depending on what variable is predicted, you get a different ranking. This simpl
 
 ## A global overview of the most predictive genes
 
-If you just want to see features that change anywhere in the trajectory, you can use `dynfeature::
+If you just want to see features that change anywhere in the trajectory, you can use `dynfeature::calculate_overall_feature_importance()`.
 
 ```{r}
 model <- dyntoy::generate_dataset(model = dyntoy::model_bifurcating(), num_features = 500)

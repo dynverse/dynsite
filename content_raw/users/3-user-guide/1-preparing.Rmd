@@ -48,15 +48,15 @@ dataset <- add_prior_information(
 You can add a grouping or clustering to the data using `dynwrap::add_grouping`:
 
 ```{r}
-# dataset <- add_grouping(
-#   dataset,
-#   example_dataset$grouping
-# )
+dataset <- add_grouping(
+  dataset,
+  example_dataset$grouping
+)
 ```
 
 ### Dimensionality reduction
 
-You can add a grouping or clustering to the data using `dynwrap::add_dimred`. The dimensionality reduction should be a matrix with the same rownames as the original expression matrix.
+You can add a dimensionality reduction to the data using `dynwrap::add_dimred`. The dimensionality reduction should be a matrix with the same rownames as the original expression matrix.
 
 ```{r}
 dataset <- add_dimred(
@@ -71,41 +71,3 @@ Currently, alternative input data such as ATAC-Seq or cytometry data are not yet
 
 In the near future, we will also add the ability to include [RNA velocity](https://www.nature.com/articles/s41586-018-0414-6) as input. See the discussion at https://github.com/dynverse/dynwrap/issues/112
 
-# Selecting the best methods for a dataset
-
-Within [our evaluation study](https://doi.org/10.1038/s41587-019-0071-9), we compared 45 methods on four aspects:
-
-* **Accuracy**: How similar is the inferred trajectory to the "true" (or "expected") trajectory in the data. We used several metrics for this, comparing the cellular ordering and topology, and compared against both real datasets, for which a gold standard is not always so well defined, and synthetic data, which are not necessarily as biologically relevant as real data.
-* **Scalability**: How long the method takes to run and how much memory it consumes. This mainly depends on the dimensions of the input data, i.e. the number of cells and features.
-* **Stability**: How stable the results are when rerunning the method with different seeds or slightly different input data.
-* **Usability**: The quality of the documentation and tutorials, how easy it is to run the method, whether the method is well tested, ... We created a transparent scoresheet to assess each of these aspects in a _more or less_ objective way.
-
-Perhaps not surprisingly, we found a high diversity in method performance, and that not many methods perform well across the board. The performance of a method depended on many factors, mainly the dimensions of the data and the kind of trajectory present in the data. Based on this, we developed an interactive shiny app which you can use to explore the results and select an optimal set of methods for your analysis.
-
-This app can be opened using `dynguidelines::guidelines_shiny()`. It is recommended to give this function your dataset, so that it will precalculate some fields for you:
-
-```r
-dataset <- example_dataset
-guidelines_shiny(dataset = dataset)
-```
-
-The app includes a tutorial, which will guide you through the user interface. Once finished, it is highly recommended to copy over the code that generates the guidelines to your script, so that your analysis remains reproducible, for example:
-
-```{r}
-dataset <- example_dataset
-guidelines <- guidelines(
-  dataset,
-  answers = answer_questions(
-    dataset,
-    multiple_disconnected = FALSE,
-    expect_topology = TRUE,
-    expected_topology = "linear"
-  )
-)
-```
-
-This guidelines object contains:
-
-- Information on the selected methods: `guidelines$methods`
-- The names of the selected methods: `guidelines$methods_selected`
-- The answers given in the app (or their defaults): `guidelines$answers`

@@ -23,7 +23,7 @@ set.seed(1)
 dataset <- dyntoy::generate_dataset(model = "bifurcating", num_cells = 200)
 ```
 
-To visualise a trajectory, you have to take into acount two things:
+To visualise a trajectory, you have to take into account two things:
 
 * Where will I place the trajectory and cells in my 2D space
 * What do I want to visualise along the trajectory based on color

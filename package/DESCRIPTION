@@ -6,7 +6,7 @@ Authors@R: c(
   )
 Description: Package with the good things from pkgdown
       but for more than one package!
-License: MIT
+License: MIT + LICENSE file
 URL: https://github.com/dynverse/dynverse.github.io
 BugReports: https://github.com/dynverse/dynverse.github.io
 Depends: 
