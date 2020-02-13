@@ -9,7 +9,7 @@ link_references <- function(topics, folder, base_url = "") {
   topic2replacement <- topic2replacement[order(map_int(topic2replacement, nchar), decreasing = T)]
 
   # read html files
-  html_files <- fs::dir_ls(folder, glob = "*.html", recursive = TRUE)
+  html_files <- fs::dir_ls(folder, glob = "*.html", recurse = TRUE)
   html_file <- html_files[[1]]
 
   html_file <- "public2/reference/dynplot/plot_trajectory/plot_dimred/index.html"

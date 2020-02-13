@@ -29,6 +29,12 @@ flatten_para <- function(x, ...) {
   groups <- cumsum(before_break | after_break)
 
   html <- purrr::map_chr(x, as_html, ...)
+
+  # split at line breaks for everything except blocks
+  empty <- purrr::map_lgl(x, purrr::is_empty)
+  needs_split <- !is_block & !empty
+  html[needs_split] <- purrr::map(html[needs_split], split_at_linebreaks)
+
   blocks <- html %>%
     split(groups) %>%
     purrr::map_chr(paste, collapse = "")
@@ -235,10 +241,10 @@ as_html.tag_Sexpr <- function(x, ...) {
 
   results <- options$results %||% "rd"
   switch(results,
-    text = as.character(res),
-    rd = flatten_text(rd_text(as.character(res))),
-    hide = "",
-    stop("\\Sexpr{result=", results, "} not yet supported", call. = FALSE)
+         text = as.character(res),
+         rd = flatten_text(rd_text(as.character(res))),
+         hide = "",
+         stop("\\Sexpr{result=", results, "} not yet supported", call. = FALSE)
   )
 }
 
@@ -293,6 +299,7 @@ as_html.tag_tabular <- function(x, ...) {
 
 #' @export
 as_html.tag_figure <- function(x, ...) {
+  x <- purrr::discard(x, ~is.null(.) || length(.) == 0)
   n <- length(x)
   path <- as.character(x[[1]])
 

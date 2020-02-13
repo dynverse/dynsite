@@ -121,7 +121,7 @@ get_topic_data <- function(pkg_data, topic_name) {
 }
 
 
-package <- packages %>% extract_row_to_list(1)
+package <- packages %>% extract_row_to_list(5)
 # walk(transpose(packages %>% filter(id == "dynplot")), function(package) {
 topics <- map_dfr(transpose(packages), function(package) {
   print(package$id)
