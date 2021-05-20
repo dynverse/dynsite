@@ -213,6 +213,11 @@ as_html.tag_testonly <- function(x, ...) {
   flatten_text(drop_leading_newline(x), escape = FALSE)
 }
 
+#' @export
+as_html.tag_href <- function(x, ...) {
+  flatten_text(drop_leading_newline(x), escape = FALSE)
+}
+
 
 # This helps with \donrun{} and \donttest{} which usually start with a
 # newline.

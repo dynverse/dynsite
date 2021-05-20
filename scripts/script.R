@@ -102,7 +102,10 @@ get_sections_data <- function(pkg_data) {
     mutate(text = map_chr(text, ~markdown::markdownToHTML(text = ., fragment.only = TRUE))) %>%
     transpose()
 
-  data$logo <- fs::file_copy(paste0(pkg_data$folder, "/man/figures/logo.png"), paste0("static/images/logos/", pkg_data$id, ".png"), overwrite = TRUE) %>% fs::path_rel("static/")
+  logo_src <- paste0(pkg_data$folder, "/man/figures/logo.png")
+  if (file.exists(logo_src)) {
+    data$logo <- fs::file_copy(logo_src, paste0("static/images/logos/", pkg_data$id, ".png"), overwrite = TRUE) %>% fs::path_rel("static/")
+  }
   data
 }
 
@@ -121,7 +124,7 @@ get_topic_data <- function(pkg_data, topic_name) {
 }
 
 
-package <- packages %>% extract_row_to_list(5)
+package <- packages %>% extract_row_to_list(1)
 # walk(transpose(packages %>% filter(id == "dynplot")), function(package) {
 topics <- map_dfr(transpose(packages), function(package) {
   print(package$id)

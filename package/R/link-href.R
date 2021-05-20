@@ -7,6 +7,7 @@ href_string <- function(x, bare_symbol = FALSE) {
   href_expr(expr, bare_symbol = bare_symbol)
 }
 
+# expr <- quote(vignette("create_ti_method_container", "dynwrap"))
 
 href_expr <- function(expr, bare_symbol = FALSE) {
   if (is_symbol(expr) && bare_symbol) {
@@ -36,7 +37,12 @@ href_expr <- function(expr, bare_symbol = FALSE) {
     n_args <- length(expr) - 1
 
     if (fun_name == "vignette") {
-      expr <- lang_standardise(expr)
+      expr <-
+        tryCatch({
+          call_standardise(expr, env = environment(vignette))
+        }, error = function(e) {
+          stop("Calling '", deparse(expr), "' failed. Error:\n  ", e)
+        })
       href_article(expr$topic, expr$package)
     } else if (fun_name == "?") {
       if (n_args == 1) {

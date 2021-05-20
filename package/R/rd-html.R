@@ -58,6 +58,7 @@ flatten_para <- function(x, ...) {
 flatten_text <- function(x, ...) {
   if (length(x) == 0) return("")
 
+  # html <- purrr::map2_chr(x, seq_along(x), function(x, i) { print(i); as_html(x) } )
   html <- purrr::map_chr(x, as_html, ...)
   paste(html, collapse = "")
 }
@@ -407,20 +408,14 @@ as_html.tag_dQuote <-       tag_wrapper("&#8220;", "&#8221;")
 as_html.tag_sQuote <-       tag_wrapper("&#8216;", "&#8217;")
 
 #' @export
-as_html.tag_code <-         function(x, ..., auto_link = TRUE) {
+as_html.tag_code <-         function(x, ..., auto_link = FALSE) {
   text <- flatten_text(x, ...)
 
-  if (!auto_link) {
-    return(paste0("<code>", text, "</code>"))
+  if (auto_link) {
+    href <- downlit::autolink_url(text)
+    text <- a(text, href = href)
   }
-
-  expr <- tryCatch(
-    parse(text = text)[[1]],
-    error = function(e) NULL
-  )
-
-  href <- href_expr(expr)
-  paste0("<code>", a(text, href = href), "</code>")
+  paste0("<code>", text, "</code>")
 }
 #' @export
 as_html.tag_kbd <-          tag_wrapper("<kbd>", "</kbd>")
