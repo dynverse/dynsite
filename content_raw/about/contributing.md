@@ -2,31 +2,47 @@
 title: "Contributing"
 ---
 
-We welcome any contributions to this project, be it changes in documentation, bug fixes, new functionality, or even new packages if they fit the scope of our project. When making big changes, please first discuss the change you wish to make via issue, email, or any other method with the owners of the repository.
+We welcome any contributions to this project, be it changes in documentation, bug fixes, new functionality, or even new packages if they fit the scope of our project.  By participating in this project, you
+agree to abide by our [code of conduct](CONDUCT.md).
 
-## Pull Requests
+## Getting Started
 
-* Make sure your code is following **[tidyverse style guide](https://style.tidyverse.org/)**
-* Ensure that you are working in the **devel branch** (or any derivates of the devel branch)
-* Edit the NEWS.md and **bump the version number** to x.x.x.9000 if there is not yet an unreleased version present
-* Adding a unit test will increase the likelihood of acceptance
+* Make sure you have a [GitHub account](https://github.com/signup/free). If you are not familar with git and GitHub, take a look at <http://happygitwithr.com/> to get started.
+* [Submit a post for your issue](https://github.com/dynverse/dynverse/issues) for your problem or suggestion, assuming one does not already exist.
+* Clearly describe your issue, including steps to reproduce when it is a bug, or some justification for a proposed improvement.
+* [Fork](https://github.com/dynverse/dynverse/#fork-destination-box) the repository on GitHub to make a copy of the repository on your account.
 
-## Branches
 
-Each package always has 2 branches: devel and master. All development happens in the devel branch (or a derivative thereof), and this is only merged once the features are tested thoroughly.  
+## Making changes
 
-The devel branch always has version number x.x.x.9000. This version number is bumped right before merging to master.
+* Edit the files, save often, and make commits of logical units, where each commit indicates one concept.
+* Follow the [tidyverse style guide](https://style.tidyverse.org/).
+* Make sure you write [good commit messages](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html).
+* Add a unit test for added functionality or a bug you fixed.
+* Run _all_ the tests using `rcmdcheck::rcmdcheck()` to assure nothing else was accidentally broken.
+* Edit the NEWS.md file to describe the changes you made.
+* If you need help or unsure about anything, post an update to [your issue](https://github.com/dynverse/dynverse/issues).
 
-We have strict rules regarding dependencies between dynverse packages:
 
-* devel branch always depends on the devel branch of other dynverse packages
-* master branch always depends on the master branch of other dynverse packages
-* cran versions (obivously) always depend on cran versions of other dynverse packages
+## Submitting your changes
 
-The Remotes of a package are only removed from master right before submitting to CRAN.
+Push to your fork and [submit a pull request](https://github.com/dynverse/dynverse/compare/).
 
-To help development, we provide some helper functions in the `dynutils` package:
+At this point you're waiting on us. We like to at least comment on pull requests
+within a few days (and, typically, one business day). We may suggest
+some changes or improvements or alternatives.
 
-* `switch_devel()` will bump version number to x.x.x.9000 and will add @devel to Remotes
-* `switch_master()` will bump version number to x.x.x and will add @master to Remotes
-* `switch_cran()` will remove remotes
+
+## Tips
+Some things you can do that will increase the chance that your pull request is dealt with in a timely manner:
+
+* Engage in discussion on [your issue](https://github.com/dynverse/dynverse/issues/).
+* Be familiar with the background literature cited in the [README](README.md).
+* Follow our [code style guide](https://style.tidyverse.org/).
+* Write a [good commit message](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html).
+* Document your changes in the NEWS.md file.
+* Write unit tests for the changes you made.
+
+
+
+
